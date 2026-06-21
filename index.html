@@ -187,36 +187,34 @@ img{display:block;max-width:100%;height:auto}
 ══════════════════════════════════════ */
 .sec-names{
   position:relative;width:100%;
-  min-height:100vh;min-height:100dvh;
+  /* bg.png is a portrait poster (1240x1748) that already contains the
+     names + save-the-date text baked in. We size the section to the
+     image's own aspect ratio so the ENTIRE poster is always visible,
+     never cropped, on any screen — phone or desktop. */
+  aspect-ratio:1240/1748;
+  min-height:100vh;min-height:100dvh; /* fallback for older browsers w/o aspect-ratio support */
   display:flex;align-items:center;justify-content:center;
-  overflow:hidden;margin-top:-1px
+  overflow:hidden;margin-top:-1px;
+  background:#0a1a0a
+}
+@supports(aspect-ratio:1/1){
+  .sec-names{ min-height:0 }
 }
 .names-bg{
   position:absolute;inset:0;z-index:0;
-  background:url('bg.png') center center/cover no-repeat;
-  transform:scale(1.05);animation:kb 32s ease-in-out infinite
+  /* contain (not cover) so the full poster — including the text and
+     the bow at the bottom — is always shown, never cut off */
+  background:url('bg.png') center center/contain no-repeat;
+  transform:scale(1.0);animation:kb 32s ease-in-out infinite
 }
 @keyframes kb{
-  0%{transform:scale(1.05)}50%{transform:scale(1.12)}100%{transform:scale(1.05)}
+  0%{transform:scale(1.0)}50%{transform:scale(1.04)}100%{transform:scale(1.0)}
 }
 .names-ov{
-  position:absolute;inset:0;z-index:1;
-  background:linear-gradient(
-    180deg,
-    rgba(10,26,10,.95) 0%,
-    rgba(10,26,10,.5) 15%,
-    rgba(10,26,10,.38) 50%,
-    rgba(10,26,10,.5) 80%,
-    rgba(10,26,10,.95) 100%
-  )
+  display:none; /* the poster's own text + scenery should show through untouched */
 }
 .names-content{
-  position:relative;z-index:10;
-  text-align:center;
-  /* generous safe padding so nothing clips on small phones */
-  padding:clamp(5rem,10vh,7rem) clamp(1rem,4vw,2rem) clamp(3rem,6vh,5rem);
-  display:flex;flex-direction:column;align-items:center;
-  width:100%;max-width:100%
+  display:none; /* names/date text already baked into bg.png — no HTML duplicate */
 }
 .names-block{line-height:.88;margin-bottom:clamp(1rem,3vh,1.6rem)}
 .name-line{display:flex;justify-content:center;overflow:hidden;width:100%}
@@ -315,7 +313,7 @@ img{display:block;max-width:100%;height:auto}
 }
 .sec-venues .s-bg{
   position:absolute;inset:0;z-index:0;
-  background:url('bg.png') center center/cover no-repeat
+  background:url('adobe-bg.jpg') center center/cover no-repeat
 }
 .sec-venues .s-ov{
   position:absolute;inset:0;z-index:1;
@@ -490,7 +488,7 @@ img{display:block;max-width:100%;height:auto}
 }
 .sec-cd .s-bg{
   position:absolute;inset:0;z-index:0;
-  background:url('bg.png') center center/cover no-repeat
+  background:url('adobe-bg.jpg') center center/cover no-repeat
 }
 .sec-cd .s-ov{
   position:absolute;inset:0;z-index:1;
@@ -858,19 +856,6 @@ img{display:block;max-width:100%;height:auto}
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Letter split helper ── */
-function sp(id, t) {
-  const e = document.getElementById(id);
-  t.split('').forEach(c => {
-    const s = document.createElement('span');
-    s.className = 'letter';
-    s.textContent = c === ' ' ? '\u00A0' : c;
-    e.appendChild(s);
-  });
-  return e.querySelectorAll('.letter');
-}
-const lA = sp('lnA','ARAVIND'), lW = sp('lnW','Weds'), lV = sp('lnV','VEENA');
-
 /* ── 3D Gallery ── */
 (function(){
   const cyl = document.getElementById('galCyl');
@@ -1055,20 +1040,12 @@ addEventListener('load', ()=>{
 
   gsap.to('#h1Img',{scale:1.06,duration:18,repeat:-1,yoyo:true,ease:'sine.inOut',delay:1.6});
 
-  /* Names section */
+  /* Names section — bg.png already contains the names/date text, so we
+     just gently reveal the poster image itself plus the scroll cue. */
   ScrollTrigger.create({trigger:'#secNames',start:'top 62%',once:true, onEnter:()=>{
     gsap.timeline()
-      .to(lA,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'})
-      .from(lA,{y:-120,duration:.65,stagger:.07,ease:'bounce.out'},'<')
-      .to(lW,{opacity:1,y:0,duration:.6,stagger:.09,ease:'bounce.out'},'-=.1')
-      .from(lW,{y:-100,duration:.6,stagger:.09,ease:'bounce.out'},'<')
-      .to(lV,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'},'-=.05')
-      .from(lV,{y:-120,duration:.65,stagger:.07,ease:'bounce.out'},'<')
-      .to('#gDiv',{width:clamp(120,180),duration:.7,ease:'power2.out'},'+=.15')
-      .fromTo('#sDt',{opacity:0,y:12},{opacity:1,y:0,duration:.65},'-=.2')
-      .fromTo('#dTx',{opacity:0,y:12},{opacity:1,y:0,duration:.65},'-=.3')
-      .fromTo('#mDt',{opacity:0},{opacity:1,duration:.5},'-=.2')
-      .to('#sc2',{opacity:1,duration:.5},'-=.1');
+      .fromTo('#secNames .names-bg',{opacity:0},{opacity:1,duration:1,ease:'power2.out'})
+      .to('#sc2',{opacity:1,duration:.5},'-=.2');
   }});
 
   ScrollTrigger.create({trigger:'#secFam',start:'top 65%',once:true,
@@ -1100,16 +1077,7 @@ addEventListener('load', ()=>{
       .to('#rBtn',{opacity:1,y:0,duration:.6,ease:'back.out(1.7)'},'-=.2')
       .fromTo('#rCt',{opacity:0},{opacity:1,duration:.5},'-=.1');
   }});
-
-  /* letter hover glow */
-  document.querySelectorAll('.letter').forEach(l=>{
-    l.addEventListener('mouseenter',()=>gsap.to(l,{textShadow:'0 0 30px rgba(200,164,92,.65)',scale:1.05,duration:.22}));
-    l.addEventListener('mouseleave',()=>gsap.to(l,{scale:1,duration:.3}));
-  });
 });
-
-/* tiny helper used above */
-function clamp(min,max){ const v=window.innerWidth*.12; return Math.max(min,Math.min(max,v)) }
 </script>
 </body>
 </html>
