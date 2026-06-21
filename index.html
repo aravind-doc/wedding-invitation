@@ -16,30 +16,23 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
 
 <style>
-/*═══════════════════════════════════════════
-  RESET & TOKENS
-═══════════════════════════════════════════*/
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --deep:#0a1a0a;--forest:#14291a;--mist:rgba(255,255,255,0.85);
+  --deep:#0a1a0a;--forest:#14291a;
   --gold:#c8a45c;--gold-l:#e2c97e;--gold-d:#a07c3a;
   --cream:#f5f0e8;--txt:rgba(255,255,255,0.92);--dim:rgba(255,255,255,0.50);
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--txt);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/*═══════════════════════════════════════════
-  LOADER
-═══════════════════════════════════════════*/
+/*── LOADER ──*/
 .loader{position:fixed;inset:0;z-index:9999;background:var(--deep);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem}
 .loader-mono{font-family:'Cinzel',serif;font-size:2.5rem;font-weight:400;color:var(--gold);letter-spacing:.4em;opacity:0}
 .loader-bar{width:80px;height:1px;background:rgba(200,164,92,.15);position:relative;overflow:hidden}
 .loader-bar::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);animation:lSlide 1s ease-in-out infinite}
 @keyframes lSlide{0%{left:-100%}100%{left:100%}}
 
-/*═══════════════════════════════════════════
-  MUSIC TOGGLE
-═══════════════════════════════════════════*/
+/*── MUSIC ──*/
 .music-btn{position:fixed;top:1.5rem;right:1.5rem;z-index:1000;width:46px;height:46px;border-radius:50%;border:1px solid rgba(200,164,92,.35);background:rgba(10,26,10,.65);backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s}
 .music-btn:hover{border-color:var(--gold);background:rgba(10,26,10,.9)}
 .m-bars{display:flex;align-items:flex-end;gap:2px;height:16px}
@@ -49,111 +42,92 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 .m-bars.on span:nth-child(3){animation:b3 .7s ease-in-out infinite .2s}
 .m-bars.on span:nth-child(4){animation:b4 .55s ease-in-out infinite .05s}
 .m-bars:not(.on) span{height:3px!important}
-@keyframes b1{0%,100%{height:4px}50%{height:14px}}
-@keyframes b2{0%,100%{height:6px}50%{height:10px}}
-@keyframes b3{0%,100%{height:3px}50%{height:16px}}
-@keyframes b4{0%,100%{height:5px}50%{height:12px}}
+@keyframes b1{0%,100%{height:4px}50%{height:14px}}@keyframes b2{0%,100%{height:6px}50%{height:10px}}
+@keyframes b3{0%,100%{height:3px}50%{height:16px}}@keyframes b4{0%,100%{height:5px}50%{height:12px}}
 
-/*═══════════════════════════════════════════
-  FOG LAYERS (reused)
-═══════════════════════════════════════════*/
-.fog-wrap{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+/*── FOG / SMOG ──*/
+.fog-wrap{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
 .fog{position:absolute;width:200%;height:100%;top:0;left:-50%;will-change:transform}
-.fog-a{background:radial-gradient(ellipse 600px 120px at 15% 22%,rgba(255,255,255,.22) 0%,transparent 70%),radial-gradient(ellipse 800px 100px at 52% 35%,rgba(255,255,255,.16) 0%,transparent 70%),radial-gradient(ellipse 500px 80px at 82% 18%,rgba(255,255,255,.18) 0%,transparent 70%);animation:fR 28s linear infinite;opacity:.6}
-.fog-b{background:radial-gradient(ellipse 900px 130px at 25% 52%,rgba(255,255,255,.17) 0%,transparent 65%),radial-gradient(ellipse 650px 100px at 62% 45%,rgba(255,255,255,.19) 0%,transparent 65%);animation:fL 38s linear infinite;opacity:.4}
-.fog-c{background:radial-gradient(ellipse 1100px 70px at 35% 68%,rgba(255,255,255,.14) 0%,transparent 60%),radial-gradient(ellipse 700px 60px at 72% 72%,rgba(255,255,255,.11) 0%,transparent 60%);animation:fR 48s linear infinite;opacity:.35}
+.fog-a{background:radial-gradient(ellipse 600px 130px at 15% 25%,rgba(255,255,255,.28) 0%,transparent 70%),radial-gradient(ellipse 820px 110px at 52% 38%,rgba(255,255,255,.20) 0%,transparent 70%),radial-gradient(ellipse 520px 90px at 82% 20%,rgba(255,255,255,.22) 0%,transparent 70%);animation:fR 26s linear infinite;opacity:.7}
+.fog-b{background:radial-gradient(ellipse 920px 140px at 25% 55%,rgba(255,255,255,.22) 0%,transparent 65%),radial-gradient(ellipse 680px 110px at 62% 48%,rgba(255,255,255,.24) 0%,transparent 65%);animation:fL 36s linear infinite;opacity:.55}
+.fog-c{background:radial-gradient(ellipse 1100px 90px at 35% 72%,rgba(255,255,255,.20) 0%,transparent 60%),radial-gradient(ellipse 720px 80px at 72% 76%,rgba(255,255,255,.16) 0%,transparent 60%);animation:fR 46s linear infinite;opacity:.5}
 @keyframes fR{0%{transform:translateX(0)}100%{transform:translateX(50%)}}
 @keyframes fL{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/*═══════════════════════════════════════════
-  SCROLL CUE
-═══════════════════════════════════════════*/
-.scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:.6rem;opacity:0}
-.scroll-cue span{font-family:'Cinzel',serif;font-size:.6rem;color:var(--dim);letter-spacing:.25em;text-transform:uppercase}
-.scroll-chev{width:16px;height:16px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg);animation:chev 2s ease-in-out infinite}
+/*── SCROLL CUE ──*/
+.scroll-cue{position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0}
+.scroll-cue span{font-family:'Cinzel',serif;font-size:.6rem;color:rgba(255,255,255,.7);letter-spacing:.25em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.scroll-chev{width:16px;height:16px;border-right:1.5px solid rgba(255,255,255,.6);border-bottom:1.5px solid rgba(255,255,255,.6);transform:rotate(45deg);animation:chev 2s ease-in-out infinite}
 @keyframes chev{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(5px)}}
 
-/*═══════════════════════════════════════════
-  SECTION 1 — "YOU ARE INVITED" (Kathakali hero)
-═══════════════════════════════════════════*/
-.sec-hero1{position:relative;width:100%;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#0d0a06}
-.hero1-bg{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center}
-.hero1-bg img{
-  max-width:min(90vw, 550px);max-height:85vh;
-  object-fit:contain;border-radius:8px;
-  box-shadow:0 20px 80px rgba(0,0,0,.6);
-  opacity:0;
-}
-.hero1-overlay{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at center,rgba(13,10,6,.2) 0%,rgba(13,10,6,.75) 70%,rgba(13,10,6,.95) 100%)}
-.hero1-content{position:relative;z-index:10;text-align:center;padding:2rem}
-.hero1-top{font-family:'Cormorant',serif;font-style:italic;font-weight:300;font-size:clamp(.8rem,2vw,1rem);color:var(--gold-l);letter-spacing:.35em;text-transform:uppercase;opacity:0;margin-bottom:1rem}
-.hero1-main{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(2.2rem,8vw,4.5rem);color:var(--cream);line-height:1.1;text-shadow:0 4px 40px rgba(0,0,0,.6);opacity:0;letter-spacing:.04em}
-.hero1-sub{font-family:'Cormorant',serif;font-style:italic;font-weight:300;font-size:clamp(.95rem,2.5vw,1.2rem);color:var(--gold-l);letter-spacing:.3em;opacity:0;margin-top:1.2rem}
-.hero1-orn{margin-top:2rem;opacity:0}
-.hero1-orn svg{width:100px;height:auto}
+/*═════════════════════════════════════════
+  SECTION 1 — KATHAKALI HERO (full-fill)
+═════════════════════════════════════════*/
+.sec-hero1{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#0d0a06}
+/* blurred backdrop fills any gap behind the cover image */
+.hero1-blur{position:absolute;inset:0;z-index:0;background:url('hero1.png') center center/cover no-repeat;filter:blur(30px) brightness(.5);transform:scale(1.2)}
+/* main image fully covers viewport */
+.hero1-img{position:absolute;inset:0;z-index:1;background:url('hero1.png') center center/cover no-repeat;opacity:0}
+/* gentle vignette + bottom fade that BLENDS into next section */
+.hero1-vig{position:absolute;inset:0;z-index:2;background:
+  radial-gradient(ellipse at center,transparent 30%,rgba(13,10,6,.35) 100%),
+  linear-gradient(180deg,rgba(13,10,6,.25) 0%,transparent 25%,transparent 70%,rgba(10,26,10,.85) 100%)}
 
-/*═══════════════════════════════════════════
-  SECTION 2 — ARAVIND WEDS VEENA (full page)
-═══════════════════════════════════════════*/
-.sec-names{position:relative;width:100%;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/*═════════════════════════════════════════
+  SECTION 2 — ARAVIND WEDS VEENA (MAIN)
+═════════════════════════════════════════*/
+.sec-names{position:relative;width:100%;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:-1px}
 .names-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat;transform:scale(1.05)}
 @keyframes kb{0%{transform:scale(1.05)}50%{transform:scale(1.12)}100%{transform:scale(1.05)}}
-.names-bg{animation:kb 30s ease-in-out infinite}
-.names-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,26,10,.45) 0%,rgba(10,26,10,.15) 35%,rgba(10,26,10,.10) 55%,rgba(10,26,10,.50) 100%)}
+.names-bg{animation:kb 32s ease-in-out infinite}
+/* darker overlay so WHITE letters dominate as foreground; top fades in from hero1 */
+.names-ov{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.45) 14%,rgba(10,26,10,.35) 45%,rgba(10,26,10,.45) 75%,rgba(10,26,10,.92) 100%)}
 .names-content{position:relative;z-index:10;text-align:center;padding:2rem 1rem;display:flex;flex-direction:column;align-items:center}
-.names-block{line-height:.92;margin-bottom:1.2rem}
+.names-block{line-height:.9;margin-bottom:1.4rem}
 .name-line{display:flex;justify-content:center;overflow:hidden}
-.letter{font-family:'Cinzel',serif;font-weight:700;color:#fff;text-shadow:0 3px 30px rgba(0,0,0,.5),0 0 80px rgba(0,0,0,.2);display:inline-block;opacity:0}
+.letter{font-family:'Cinzel',serif;font-weight:800;color:#fff;
+  text-shadow:0 4px 30px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.9),0 0 60px rgba(0,0,0,.4);
+  display:inline-block;opacity:0}
 .ln .letter{font-size:clamp(3rem,13vw,9rem)}
-.lw .letter{font-size:clamp(2.2rem,9vw,6.5rem);font-weight:400;font-style:italic;font-family:'Cormorant',serif;color:var(--gold-l);text-shadow:0 2px 20px rgba(0,0,0,.4)}
-.gold-div{width:0;height:1px;margin:1.2rem auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);position:relative}
-.gold-div::before{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.6rem;color:var(--gold);opacity:0}
-.save-dt{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(1.2rem,3.5vw,2rem);color:var(--gold-l);letter-spacing:.3em;text-transform:uppercase;opacity:0}
-.date-tx{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.3rem,4vw,2.5rem);color:#fff;letter-spacing:.1em;opacity:0;margin-top:.3rem}
-.mal-dt{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(.85rem,2vw,1.1rem);color:var(--dim);letter-spacing:.15em;margin-top:.4rem;opacity:0}
+.lw .letter{font-size:clamp(2rem,8.5vw,6rem);font-weight:500;font-style:italic;font-family:'Cormorant',serif;color:var(--gold-l);
+  text-shadow:0 3px 24px rgba(0,0,0,.8),0 0 40px rgba(200,164,92,.25)}
+.gold-div{width:0;height:1px;margin:1.3rem auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);position:relative}
+.save-dt{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(1.2rem,3.5vw,2rem);color:var(--gold-l);letter-spacing:.3em;text-transform:uppercase;opacity:0;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+.date-tx{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(1.3rem,4vw,2.5rem);color:#fff;letter-spacing:.1em;opacity:0;margin-top:.3rem;text-shadow:0 2px 16px rgba(0,0,0,.8)}
+.mal-dt{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(.85rem,2vw,1.1rem);color:rgba(255,255,255,.7);letter-spacing:.15em;margin-top:.4rem;opacity:0;text-shadow:0 1px 10px rgba(0,0,0,.7)}
 
-/*═══════════════════════════════════════════
-  SECTION 3 — FAMILY
-═══════════════════════════════════════════*/
-.sec-family{position:relative;width:100%;padding:6rem 1.5rem;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.sec-family .s-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat fixed}
-.sec-family .s-ov{position:absolute;inset:0;z-index:1;background:rgba(10,26,10,.82)}
+/*═════════════════════════════════════════
+  SECTION 3 — FAMILY (Adobe wallpaper bg)
+═════════════════════════════════════════*/
+.sec-family{position:relative;width:100%;padding:7rem 1.5rem;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:-1px}
+.sec-family .s-bg{position:absolute;inset:0;z-index:0;background:url('adobe-bg.jpg') center center/cover no-repeat fixed}
+/* blend top + bottom into neighbouring sections */
+.sec-family .s-ov{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.74) 18%,rgba(10,26,10,.70) 82%,rgba(10,26,10,.92) 100%)}
+.sec-family .fog-wrap{z-index:2}
 .fam-content{position:relative;z-index:10;max-width:700px;text-align:center}
-.fam-text{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(1rem,2.8vw,1.3rem);color:var(--txt);line-height:2;letter-spacing:.02em;opacity:0}
+.fam-text{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(1rem,2.8vw,1.3rem);color:var(--txt);line-height:2;letter-spacing:.02em;opacity:0;text-shadow:0 2px 12px rgba(0,0,0,.6)}
 .fam-text .par{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(.9rem,2.4vw,1.1rem);color:var(--gold-l);letter-spacing:.08em;display:block;margin:.25rem 0;font-style:normal}
-.fam-text .addr{font-size:.88em;color:var(--dim);display:block;margin-bottom:.8rem}
+.fam-text .addr{font-size:.88em;color:rgba(255,255,255,.6);display:block;margin-bottom:.8rem}
 .fam-text .hi{font-family:'Cinzel',serif;color:#fff;font-style:normal;font-size:1.15em}
 
-/*═══════════════════════════════════════════
+/*═════════════════════════════════════════
   SECTION 4 — 3D VENUE CARDS
-═══════════════════════════════════════════*/
-.sec-venues{position:relative;width:100%;padding:5rem 1.5rem;overflow:hidden}
+═════════════════════════════════════════*/
+.sec-venues{position:relative;width:100%;padding:6rem 1.5rem;overflow:hidden;margin-top:-1px}
 .sec-venues .s-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat fixed}
-.sec-venues .s-ov{position:absolute;inset:0;z-index:1;background:rgba(10,26,10,.72)}
+.sec-venues .s-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.72) 18%,rgba(10,26,10,.72) 82%,rgba(10,26,10,.92) 100%)}
 .ven-wrap{position:relative;z-index:10;max-width:1000px;margin:0 auto}
 .ven-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2rem);text-align:center;color:var(--gold);letter-spacing:.2em;margin-bottom:3rem;opacity:0}
 .ven-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 @media(max-width:700px){.ven-grid{grid-template-columns:1fr;gap:1.5rem}}
-
-/* 3D tilt card */
 .tilt-wrap{perspective:900px}
-.ven-card{
-  position:relative;padding:2.8rem 2rem;text-align:center;
-  border:1px solid rgba(200,164,92,.22);border-radius:6px;
-  background:linear-gradient(160deg,rgba(20,41,26,.85) 0%,rgba(14,30,18,.92) 100%);
-  backdrop-filter:blur(14px);
-  overflow:hidden;opacity:0;transform:translateY(40px);
-  transition:transform .15s ease-out,box-shadow .3s;
-  transform-style:preserve-3d;
-  will-change:transform;
-  box-shadow:0 8px 32px rgba(0,0,0,.3);
-}
+.ven-card{position:relative;padding:2.8rem 2rem;text-align:center;border:1px solid rgba(200,164,92,.22);border-radius:6px;background:linear-gradient(160deg,rgba(20,41,26,.85) 0%,rgba(14,30,18,.92) 100%);backdrop-filter:blur(14px);overflow:hidden;opacity:0;transform:translateY(40px);transition:transform .15s ease-out,box-shadow .3s;transform-style:preserve-3d;will-change:transform;box-shadow:0 8px 32px rgba(0,0,0,.3)}
 .ven-card:hover{box-shadow:0 16px 50px rgba(0,0,0,.45)}
 .ven-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-/* Shine layer */
-.ven-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(200,164,92,.08) 0%,transparent 60%);pointer-events:none;transition:opacity .3s;opacity:0}
+.ven-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(200,164,92,.10) 0%,transparent 55%);pointer-events:none;transition:opacity .3s;opacity:0}
 .ven-card:hover::after{opacity:1}
-
 .vc-icon{width:52px;height:52px;margin:0 auto 1.2rem;border:1px solid rgba(200,164,92,.28);border-radius:50%;display:flex;align-items:center;justify-content:center}
 .vc-icon svg{width:22px;height:22px}
 .vc-label{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(.75rem,1.8vw,.9rem);color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:1rem}
@@ -165,12 +139,12 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 .vc-map:hover{background:rgba(200,164,92,.12);border-color:var(--gold)}
 .vc-map svg{width:14px;height:14px;fill:var(--gold)}
 
-/*═══════════════════════════════════════════
-  SECTION 5 — 3D CYLINDER GALLERY
-═══════════════════════════════════════════*/
-.sec-gallery{position:relative;width:100%;padding:5rem 1.5rem;overflow:hidden}
-.sec-gallery .s-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat fixed}
-.sec-gallery .s-ov{position:absolute;inset:0;z-index:1;background:rgba(10,26,10,.78)}
+/*═════════════════════════════════════════
+  SECTION 5 — 3D GALLERY
+═════════════════════════════════════════*/
+.sec-gallery{position:relative;width:100%;padding:6rem 1.5rem;overflow:hidden;margin-top:-1px}
+.sec-gallery .s-bg{position:absolute;inset:0;z-index:0;background:url('adobe-bg.jpg') center center/cover no-repeat fixed}
+.sec-gallery .s-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.78) 18%,rgba(10,26,10,.78) 82%,rgba(10,26,10,.92) 100%)}
 .gal-wrap{position:relative;z-index:10;max-width:1200px;margin:0 auto}
 .gal-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2rem);text-align:center;color:var(--gold);letter-spacing:.2em;margin-bottom:3rem;opacity:0}
 .gal-vp{width:100%;height:clamp(280px,50vw,420px);perspective:1200px;display:flex;align-items:center;justify-content:center;cursor:grab;-webkit-user-select:none;user-select:none;overflow:visible}
@@ -185,26 +159,26 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 .gal-ph span{font-family:'Cormorant',serif;font-style:italic;font-size:.8rem;color:var(--gold);opacity:.6}
 .gal-hint{text-align:center;margin-top:2rem;font-family:'Cormorant',serif;font-style:italic;font-size:.95rem;color:var(--dim);opacity:0}
 
-/*═══════════════════════════════════════════
+/*═════════════════════════════════════════
   SECTION 6 — COUNTDOWN
-═══════════════════════════════════════════*/
-.sec-cd{position:relative;width:100%;padding:6rem 1.5rem;overflow:hidden}
+═════════════════════════════════════════*/
+.sec-cd{position:relative;width:100%;padding:7rem 1.5rem;overflow:hidden;margin-top:-1px}
 .sec-cd .s-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat fixed}
-.sec-cd .s-ov{position:absolute;inset:0;z-index:1;background:rgba(10,26,10,.75)}
+.sec-cd .s-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.74) 18%,rgba(10,26,10,.74) 82%,rgba(10,26,10,.92) 100%)}
 .cd-wrap{position:relative;z-index:10;max-width:800px;margin:0 auto;text-align:center}
 .cd-label{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(1.2rem,3vw,1.6rem);color:var(--gold-l);letter-spacing:.25em;text-transform:uppercase;margin-bottom:.4rem;opacity:0}
 .cd-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.6rem,5vw,2.5rem);color:#fff;letter-spacing:.15em;margin-bottom:3rem;opacity:0}
 .cd-boxes{display:flex;justify-content:center;gap:clamp(.8rem,3vw,2rem);flex-wrap:wrap}
-.cd-box{min-width:90px;padding:1.5rem 1rem;border:1px solid rgba(200,164,92,.18);border-radius:4px;background:rgba(10,26,10,.35);backdrop-filter:blur(8px);text-align:center;opacity:0;transform:translateY(30px)}
+.cd-box{min-width:90px;padding:1.5rem 1rem;border:1px solid rgba(200,164,92,.18);border-radius:4px;background:rgba(10,26,10,.4);backdrop-filter:blur(8px);text-align:center;opacity:0;transform:translateY(30px)}
 .cd-num{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(2rem,6vw,3rem);color:var(--gold);line-height:1}
 .cd-unit{font-family:'Cormorant',serif;font-size:.78rem;font-weight:400;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;margin-top:.5rem}
 
-/*═══════════════════════════════════════════
+/*═════════════════════════════════════════
   SECTION 7 — RSVP
-═══════════════════════════════════════════*/
-.sec-rsvp{position:relative;width:100%;padding:6rem 1.5rem 4rem;overflow:hidden}
-.sec-rsvp .s-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat fixed}
-.sec-rsvp .s-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,26,10,.75) 0%,rgba(10,26,10,.88) 100%)}
+═════════════════════════════════════════*/
+.sec-rsvp{position:relative;width:100%;padding:7rem 1.5rem 4rem;overflow:hidden;margin-top:-1px}
+.sec-rsvp .s-bg{position:absolute;inset:0;z-index:0;background:url('adobe-bg.jpg') center center/cover no-repeat fixed}
+.sec-rsvp .s-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.84) 40%,rgba(10,26,10,.95) 100%)}
 .rsvp-wrap{position:relative;z-index:10;max-width:600px;margin:0 auto;text-align:center}
 .rsvp-t{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2rem);color:var(--gold);letter-spacing:.2em;margin-bottom:1rem;opacity:0}
 .rsvp-p{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.05rem,2.5vw,1.25rem);color:var(--txt);line-height:1.8;margin-bottom:2rem;opacity:0}
@@ -229,39 +203,19 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 
 <audio id="bgMusic" loop preload="auto"><source src="wedding-song.mp3" type="audio/mpeg"></audio>
 
-<!-- LOADER -->
-<div class="loader" id="loader">
-  <div class="loader-mono" id="lMono">A &amp; V</div>
-  <div class="loader-bar"></div>
-</div>
+<div class="loader" id="loader"><div class="loader-mono" id="lMono">A &amp; V</div><div class="loader-bar"></div></div>
 
-<!-- MUSIC -->
-<button class="music-btn" id="mBtn" aria-label="Toggle music">
-  <div class="m-bars" id="mBars"><span style="height:4px"></span><span style="height:6px"></span><span style="height:3px"></span><span style="height:5px"></span></div>
-</button>
+<button class="music-btn" id="mBtn" aria-label="Toggle music"><div class="m-bars" id="mBars"><span style="height:4px"></span><span style="height:6px"></span><span style="height:3px"></span><span style="height:5px"></span></div></button>
 
-<!-- ═══ SECTION 1 — YOU ARE INVITED (Kathakali hero) ═══ -->
+<!-- ═══ SECTION 1 — KATHAKALI HERO (full image, text baked in) ═══ -->
 <section class="sec-hero1" id="secHero1">
-  <div class="hero1-bg"><img src="hero1.png" alt="Kathakali dancers" id="hero1Img"></div>
-  <div class="hero1-overlay"></div>
-  <div class="hero1-content">
-    <div class="hero1-top" id="h1Top">Together with their families</div>
-    <div class="hero1-main" id="h1Main">YOU ARE<br>INVITED TO<br>CELEBRATE</div>
-    <div class="hero1-sub" id="h1Sub">the union of two hearts</div>
-    <div class="hero1-orn" id="h1Orn">
-      <svg viewBox="0 0 100 16" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="8" x2="38" y2="8" stroke="rgba(200,164,92,.4)" stroke-width=".5"/>
-        <circle cx="43" cy="8" r="1.2" fill="none" stroke="rgba(200,164,92,.5)" stroke-width=".5"/>
-        <circle cx="50" cy="8" r="2.5" fill="none" stroke="rgba(200,164,92,.6)" stroke-width=".6"/>
-        <circle cx="57" cy="8" r="1.2" fill="none" stroke="rgba(200,164,92,.5)" stroke-width=".5"/>
-        <line x1="62" y1="8" x2="100" y2="8" stroke="rgba(200,164,92,.4)" stroke-width=".5"/>
-      </svg>
-    </div>
-  </div>
+  <div class="hero1-blur"></div>
+  <div class="hero1-img" id="h1Img"></div>
+  <div class="hero1-vig"></div>
   <div class="scroll-cue" id="sc1"><span>Scroll Down</span><div class="scroll-chev"></div></div>
 </section>
 
-<!-- ═══ SECTION 2 — ARAVIND WEDS VEENA ═══ -->
+<!-- ═══ SECTION 2 — ARAVIND WEDS VEENA (MAIN, foreground) ═══ -->
 <section class="sec-names" id="secNames">
   <div class="names-bg"></div>
   <div class="names-ov"></div>
@@ -277,11 +231,13 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
     <div class="date-tx" id="dTx">12 September 2026</div>
     <div class="mal-dt" id="mDt">1202 Chingam 27 · Saturday</div>
   </div>
+  <div class="scroll-cue" id="sc2"><span>Scroll Down</span><div class="scroll-chev"></div></div>
 </section>
 
-<!-- ═══ SECTION 3 — FAMILY ═══ -->
+<!-- ═══ SECTION 3 — FAMILY (Adobe wallpaper) ═══ -->
 <section class="sec-family" id="secFam">
   <div class="s-bg"></div><div class="s-ov"></div>
+  <div class="fog-wrap"><div class="fog fog-b"></div></div>
   <div class="fam-content">
     <div class="fam-text" id="famTx">
       We,<br>
@@ -303,30 +259,24 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
   <div class="ven-wrap">
     <div class="ven-title" id="venT">Celebrations</div>
     <div class="ven-grid">
-      <!-- Wedding -->
-      <div class="tilt-wrap">
-        <div class="ven-card" id="cW">
-          <div class="vc-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9.5 5 7 8 7 11a5 5 0 0010 0c0-3-2.5-6-5-9z" stroke="rgba(200,164,92,.8)" stroke-width="1.2" fill="none"/><circle cx="12" cy="11" r="1.5" fill="rgba(200,164,92,.5)"/><line x1="12" y1="16" x2="12" y2="22" stroke="rgba(200,164,92,.5)" stroke-width="1"/></svg></div>
-          <div class="vc-label">Wedding Ceremony</div>
-          <div class="vc-date">September 12, 2026</div>
-          <div class="vc-day">Saturday</div>
-          <div class="vc-time">11:50 AM — 12:25 PM</div>
-          <div class="vc-name">Sarada Kalyana Mandapam<br>Randamkutty, Kilikolloor, Kollam</div>
-          <a href="https://maps.google.com/?q=Sarada+Kalyana+Mandapam+Kilikolloor+Kollam" target="_blank" rel="noopener" class="vc-map"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>View on Map</a>
-        </div>
-      </div>
-      <!-- Reception -->
-      <div class="tilt-wrap">
-        <div class="ven-card" id="cR">
-          <div class="vc-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 18h18v2H3zM3 6l3 6h12l3-6" stroke="rgba(200,164,92,.8)" stroke-width="1.2" fill="none"/><line x1="5" y1="12" x2="5" y2="18" stroke="rgba(200,164,92,.5)" stroke-width="1"/><line x1="19" y1="12" x2="19" y2="18" stroke="rgba(200,164,92,.5)" stroke-width="1"/><circle cx="12" cy="4" r="2" fill="none" stroke="rgba(200,164,92,.5)" stroke-width=".8"/></svg></div>
-          <div class="vc-label">Reception</div>
-          <div class="vc-date">September 15, 2026</div>
-          <div class="vc-day">Tuesday</div>
-          <div class="vc-time">5:00 PM — 9:00 PM</div>
-          <div class="vc-name">Madaparambil Resort<br>Thodupuzha</div>
-          <a href="https://maps.google.com/?q=Madaparambil+Resort+Thodupuzha" target="_blank" rel="noopener" class="vc-map"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>View on Map</a>
-        </div>
-      </div>
+      <div class="tilt-wrap"><div class="ven-card" id="cW">
+        <div class="vc-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9.5 5 7 8 7 11a5 5 0 0010 0c0-3-2.5-6-5-9z" stroke="rgba(200,164,92,.8)" stroke-width="1.2" fill="none"/><circle cx="12" cy="11" r="1.5" fill="rgba(200,164,92,.5)"/><line x1="12" y1="16" x2="12" y2="22" stroke="rgba(200,164,92,.5)" stroke-width="1"/></svg></div>
+        <div class="vc-label">Wedding Ceremony</div>
+        <div class="vc-date">September 12, 2026</div>
+        <div class="vc-day">Saturday</div>
+        <div class="vc-time">11:50 AM — 12:25 PM</div>
+        <div class="vc-name">Sarada Kalyana Mandapam<br>Randamkutty, Kilikolloor, Kollam</div>
+        <a href="https://maps.google.com/?q=Sarada+Kalyana+Mandapam+Kilikolloor+Kollam" target="_blank" rel="noopener" class="vc-map"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>View on Map</a>
+      </div></div>
+      <div class="tilt-wrap"><div class="ven-card" id="cR">
+        <div class="vc-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 18h18v2H3zM3 6l3 6h12l3-6" stroke="rgba(200,164,92,.8)" stroke-width="1.2" fill="none"/><line x1="5" y1="12" x2="5" y2="18" stroke="rgba(200,164,92,.5)" stroke-width="1"/><line x1="19" y1="12" x2="19" y2="18" stroke="rgba(200,164,92,.5)" stroke-width="1"/><circle cx="12" cy="4" r="2" fill="none" stroke="rgba(200,164,92,.5)" stroke-width=".8"/></svg></div>
+        <div class="vc-label">Reception</div>
+        <div class="vc-date">September 15, 2026</div>
+        <div class="vc-day">Tuesday</div>
+        <div class="vc-time">5:00 PM — 9:00 PM</div>
+        <div class="vc-name">Madaparambil Resort<br>Thodupuzha</div>
+        <a href="https://maps.google.com/?q=Madaparambil+Resort+Thodupuzha" target="_blank" rel="noopener" class="vc-map"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>View on Map</a>
+      </div></div>
     </div>
   </div>
 </section>
@@ -336,9 +286,7 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
   <div class="s-bg"></div><div class="s-ov"></div>
   <div class="gal-wrap">
     <div class="gal-title" id="galT">Our Moments</div>
-    <div class="gal-vp" id="galVP">
-      <div class="gal-cyl" id="galCyl"></div>
-    </div>
+    <div class="gal-vp" id="galVP"><div class="gal-cyl" id="galCyl"></div></div>
     <div class="gal-hint" id="galH">← Drag to spin →</div>
   </div>
 </section>
@@ -364,7 +312,6 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
   <div class="rsvp-wrap">
     <div class="rsvp-t" id="rT">RSVP</div>
     <div class="rsvp-p" id="rP">Your presence is the greatest gift.<br>Kindly let us know if you can join us<br>for this joyous celebration.</div>
-    <!-- ✏️ REPLACE with your WhatsApp link -->
     <a href="https://wa.me/919447066237?text=We%20will%20be%20delighted%20to%20attend%20the%20wedding!" target="_blank" rel="noopener" class="rsvp-btn" id="rBtn">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.637l4.603-1.148A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.39-1.582l-.378-.229-2.728.68.742-2.636-.266-.399A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       Send RSVP via WhatsApp
@@ -381,175 +328,53 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 
 <script>
 gsap.registerPlugin(ScrollTrigger);
-
-/* ── Split letters ── */
 function sp(id,t){const e=document.getElementById(id);t.split('').forEach(c=>{const s=document.createElement('span');s.className='letter';s.textContent=c===' '?'\u00A0':c;e.appendChild(s)});return e.querySelectorAll('.letter')}
-const lA=sp('lnA','ARAVIND'), lW=sp('lnW','Weds'), lV=sp('lnV','VEENA');
+const lA=sp('lnA','ARAVIND'),lW=sp('lnW','Weds'),lV=sp('lnV','VEENA');
 
-/* ── 3D Gallery ── */
-(function(){
-  const cyl=document.getElementById('galCyl'),n=7,mob=innerWidth<600,r=mob?220:340,a=360/n;
-  for(let i=0;i<n;i++){const d=document.createElement('div');d.className='gal-item';d.style.transform=`rotateY(${i*a}deg) translateZ(${r}px)`;const img=document.createElement('img');img.src=`photos/photo${i+1}.jpg`;img.alt=`Photo ${i+1}`;img.loading='lazy';img.onerror=function(){this.parentElement.innerHTML=`<div class="gal-ph"><div class="pn">${i+1}</div><span>photo${i+1}.jpg</span></div>`};d.appendChild(img);cyl.appendChild(d)}
-})();
+/* 3D Gallery */
+(function(){const cyl=document.getElementById('galCyl'),n=7,mob=innerWidth<600,r=mob?220:340,a=360/n;for(let i=0;i<n;i++){const d=document.createElement('div');d.className='gal-item';d.style.transform=`rotateY(${i*a}deg) translateZ(${r}px)`;const img=document.createElement('img');img.src=`photos/photo${i+1}.jpg`;img.alt=`Photo ${i+1}`;img.loading='lazy';img.onerror=function(){this.parentElement.innerHTML=`<div class="gal-ph"><div class="pn">${i+1}</div><span>photo${i+1}.jpg</span></div>`};d.appendChild(img);cyl.appendChild(d)}})();
+(function(){const vp=document.getElementById('galVP'),cyl=document.getElementById('galCyl');let ang=0,drag=false,sx=0,sa=0,vel=0,lx=0,lt=0;function s(x){drag=true;sx=x;sa=ang;vel=0;lx=x;lt=Date.now();cyl.style.transition='none'}function m(x){if(!drag)return;ang=sa+(x-sx)*.35;cyl.style.transform=`rotateY(${ang}deg)`;const now=Date.now(),dt=now-lt;if(dt>0){vel=(x-lx)/dt;lx=x;lt=now}}function e(){drag=false;ang+=vel*150;cyl.style.transition='transform 1s cubic-bezier(.23,1,.32,1)';cyl.style.transform=`rotateY(${ang}deg)`}vp.addEventListener('mousedown',ev=>{ev.preventDefault();s(ev.clientX)});addEventListener('mousemove',ev=>m(ev.clientX));addEventListener('mouseup',e);vp.addEventListener('touchstart',ev=>s(ev.touches[0].clientX),{passive:true});vp.addEventListener('touchmove',ev=>m(ev.touches[0].clientX),{passive:true});vp.addEventListener('touchend',e);gsap.to({},{duration:20,repeat:-1,onUpdate(){if(!drag){ang+=.15;cyl.style.transition='none';cyl.style.transform=`rotateY(${ang}deg)`}}})})();
 
-/* ── Cylinder drag ── */
-(function(){
-  const vp=document.getElementById('galVP'),cyl=document.getElementById('galCyl');
-  let ang=0,drag=false,sx=0,sa=0,vel=0,lx=0,lt=0;
-  function s(x){drag=true;sx=x;sa=ang;vel=0;lx=x;lt=Date.now();cyl.style.transition='none'}
-  function m(x){if(!drag)return;ang=sa+(x-sx)*.35;cyl.style.transform=`rotateY(${ang}deg)`;const now=Date.now(),dt=now-lt;if(dt>0){vel=(x-lx)/dt;lx=x;lt=now}}
-  function e(){drag=false;ang+=vel*150;cyl.style.transition='transform 1s cubic-bezier(.23,1,.32,1)';cyl.style.transform=`rotateY(${ang}deg)`}
-  vp.addEventListener('mousedown',ev=>{ev.preventDefault();s(ev.clientX)});
-  addEventListener('mousemove',ev=>m(ev.clientX));addEventListener('mouseup',e);
-  vp.addEventListener('touchstart',ev=>s(ev.touches[0].clientX),{passive:true});
-  vp.addEventListener('touchmove',ev=>m(ev.touches[0].clientX),{passive:true});
-  vp.addEventListener('touchend',e);
-  // Auto-rotate
-  gsap.to({},{duration:20,repeat:-1,onUpdate(){if(!drag){ang+=.15;cyl.style.transition='none';cyl.style.transform=`rotateY(${ang}deg)`}}});
-})();
+/* 3D tilt cards */
+(function(){document.querySelectorAll('.ven-card').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`rotateY(${x*18}deg) rotateX(${-y*18}deg) translateY(0)`;card.style.setProperty('--mx',(x+.5)*100+'%');card.style.setProperty('--my',(y+.5)*100+'%')});card.addEventListener('mouseleave',()=>{card.style.transform='rotateY(0) rotateX(0) translateY(0)';card.style.transition='transform .5s ease-out';setTimeout(()=>card.style.transition='transform .15s ease-out',500)});card.addEventListener('mouseenter',()=>{card.style.transition='transform .15s ease-out'})});if('DeviceOrientationEvent' in window){function h(e){const g=e.gamma||0,b=e.beta||0;const rx=Math.max(-12,Math.min(12,g*.3));const ry=Math.max(-12,Math.min(12,(b-45)*.3));document.querySelectorAll('.ven-card').forEach(card=>{const r=card.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)card.style.transform=`rotateY(${rx}deg) rotateX(${-ry}deg) translateY(0)`})}if(typeof DeviceOrientationEvent.requestPermission==='function'){document.addEventListener('click',function o(){DeviceOrientationEvent.requestPermission().then(s=>{if(s==='granted')addEventListener('deviceorientation',h)}).catch(()=>{});document.removeEventListener('click',o)},{once:true})}else{addEventListener('deviceorientation',h)}}})();
 
-/* ── 3D TILT on venue cards ── */
-(function(){
-  document.querySelectorAll('.ven-card').forEach(card=>{
-    const wrap=card.parentElement;
-    // Desktop mouse tilt
-    card.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5;
-      const y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform=`rotateY(${x*18}deg) rotateX(${-y*18}deg) translateY(0)`;
-      card.style.setProperty('--mx',(x+.5)*100+'%');
-      card.style.setProperty('--my',(y+.5)*100+'%');
-    });
-    card.addEventListener('mouseleave',()=>{
-      card.style.transform='rotateY(0) rotateX(0) translateY(0)';
-      card.style.transition='transform .5s ease-out';
-      setTimeout(()=>card.style.transition='transform .15s ease-out',500);
-    });
-    card.addEventListener('mouseenter',()=>{card.style.transition='transform .15s ease-out'});
-  });
+/* Countdown */
+(function(){const t=new Date('2026-09-12T11:50:00+05:30').getTime();function tk(){const d=t-Date.now();if(d<=0){['nD','nH','nM','nS'].forEach(i=>document.getElementById(i).textContent='0');return}document.getElementById('nD').textContent=Math.floor(d/864e5);document.getElementById('nH').textContent=Math.floor(d%864e5/36e5);document.getElementById('nM').textContent=Math.floor(d%36e5/6e4);document.getElementById('nS').textContent=String(Math.floor(d%6e4/1e3)).padStart(2,'0')}tk();setInterval(tk,1000)})();
 
-  // Mobile gyroscope tilt
-  if('DeviceOrientationEvent' in window){
-    function handleOr(e){
-      const g=e.gamma||0,b=e.beta||0; // gamma: left-right, beta: front-back
-      const rx=Math.max(-12,Math.min(12,g*.3));
-      const ry=Math.max(-12,Math.min(12,(b-45)*.3));
-      document.querySelectorAll('.ven-card').forEach(card=>{
-        // Only if in viewport
-        const r=card.getBoundingClientRect();
-        if(r.top<innerHeight&&r.bottom>0){
-          card.style.transform=`rotateY(${rx}deg) rotateX(${-ry}deg) translateY(0)`;
-        }
-      });
-    }
-    // iOS 13+ requires permission
-    if(typeof DeviceOrientationEvent.requestPermission==='function'){
-      document.addEventListener('click',function once(){
-        DeviceOrientationEvent.requestPermission().then(s=>{if(s==='granted')addEventListener('deviceorientation',handleOr)}).catch(()=>{});
-        document.removeEventListener('click',once);
-      },{once:true});
-    } else {
-      addEventListener('deviceorientation',handleOr);
-    }
-  }
-})();
+/* Music */
+(function(){const btn=document.getElementById('mBtn'),bars=document.getElementById('mBars'),au=document.getElementById('bgMusic');let on=false;btn.onclick=()=>{if(on){au.pause();bars.classList.remove('on')}else{au.play().catch(()=>{});bars.classList.add('on')}on=!on};function auto(){au.play().then(()=>{on=true;bars.classList.add('on')}).catch(()=>{});document.removeEventListener('click',auto);document.removeEventListener('touchstart',auto);document.removeEventListener('scroll',auto)}document.addEventListener('click',auto,{once:true});document.addEventListener('touchstart',auto,{once:true});document.addEventListener('scroll',auto,{once:true})})();
 
-/* ── Countdown ── */
-(function(){
-  const t=new Date('2026-09-12T11:50:00+05:30').getTime();
-  function tk(){const d=t-Date.now();if(d<=0){['nD','nH','nM','nS'].forEach(i=>document.getElementById(i).textContent='0');return}
-  document.getElementById('nD').textContent=Math.floor(d/864e5);
-  document.getElementById('nH').textContent=Math.floor(d%864e5/36e5);
-  document.getElementById('nM').textContent=Math.floor(d%36e5/6e4);
-  document.getElementById('nS').textContent=String(Math.floor(d%6e4/1e3)).padStart(2,'0')}
-  tk();setInterval(tk,1000);
-})();
-
-/* ── Music ── */
-(function(){
-  const btn=document.getElementById('mBtn'),bars=document.getElementById('mBars'),au=document.getElementById('bgMusic');
-  let on=false;
-  btn.onclick=()=>{if(on){au.pause();bars.classList.remove('on')}else{au.play().catch(()=>{});bars.classList.add('on')}on=!on};
-  function auto(){au.play().then(()=>{on=true;bars.classList.add('on')}).catch(()=>{});document.removeEventListener('click',auto);document.removeEventListener('touchstart',auto);document.removeEventListener('scroll',auto)}
-  document.addEventListener('click',auto,{once:true});document.addEventListener('touchstart',auto,{once:true});document.addEventListener('scroll',auto,{once:true});
-})();
-
-/* ════════════════════════════════════════
-   GSAP ANIMATIONS
-   ════════════════════════════════════════ */
+/* ANIMATIONS */
 addEventListener('load',()=>{
   const intro=gsap.timeline();
-
-  // Loader
   intro.to('#lMono',{opacity:1,duration:.8,ease:'power2.out'})
     .to('#loader',{opacity:0,duration:.6,delay:.4,ease:'power2.inOut',onComplete:()=>document.getElementById('loader').style.display='none'});
+  // Hero 1 — image fills + slow zoom
+  intro.fromTo('#h1Img',{opacity:0,scale:1.08},{opacity:1,scale:1,duration:1.6,ease:'power2.out'},'-=.3')
+    .to('#sc1',{opacity:1,duration:.6},'-=.4');
+  gsap.to('#h1Img',{scale:1.06,duration:18,repeat:-1,yoyo:true,ease:'sine.inOut',delay:1.6});
 
-  // Hero 1 — Kathakali image + text
-  intro.to('#hero1Img',{opacity:1,scale:1,duration:1.4,ease:'power2.out'},'-=.3')
-    .from('#hero1Img',{scale:1.08},'-=1.4')
-    .to('#h1Top',{opacity:1,duration:.7,ease:'power2.out'},'-=.6')
-    .fromTo('#h1Main',{opacity:0,y:30},{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.3')
-    .to('#h1Sub',{opacity:1,duration:.6},'-=.3')
-    .to('#h1Orn',{opacity:1,duration:.5},'-=.2')
-    .to('#sc1',{opacity:1,duration:.5},'-=.1');
-
-  // Section 2 — Name drops (scroll-triggered)
+  // Names drop
   ScrollTrigger.create({trigger:'#secNames',start:'top 60%',once:true,onEnter:()=>{
     const tl=gsap.timeline();
     tl.to(lA,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'})
-      .from(lA,{y:-130,duration:.65,stagger:.07,ease:'bounce.out'},'<')
+      .from(lA,{y:-140,duration:.65,stagger:.07,ease:'bounce.out'},'<')
       .to(lW,{opacity:1,y:0,duration:.6,stagger:.09,ease:'bounce.out'},'-=.1')
-      .from(lW,{y:-100,duration:.6,stagger:.09,ease:'bounce.out'},'<')
+      .from(lW,{y:-110,duration:.6,stagger:.09,ease:'bounce.out'},'<')
       .to(lV,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'},'-=.05')
-      .from(lV,{y:-120,duration:.65,stagger:.07,ease:'bounce.out'},'<')
+      .from(lV,{y:-130,duration:.65,stagger:.07,ease:'bounce.out'},'<')
       .to('#gDiv',{width:180,duration:.7,ease:'power2.out'},'+=.2')
       .fromTo('#sDt',{opacity:0,y:15},{opacity:1,y:0,duration:.7},'-=.3')
       .fromTo('#dTx',{opacity:0,y:15},{opacity:1,y:0,duration:.7},'-=.3')
-      .fromTo('#mDt',{opacity:0},{opacity:1,duration:.5},'-=.2');
+      .fromTo('#mDt',{opacity:0},{opacity:1,duration:.5},'-=.2')
+      .to('#sc2',{opacity:1,duration:.5},'-=.1');
   }});
-
-  // Section 3 — Family
-  ScrollTrigger.create({trigger:'#secFam',start:'top 65%',once:true,onEnter:()=>{
-    gsap.fromTo('#famTx',{opacity:0,y:30},{opacity:1,y:0,duration:1.2,ease:'power2.out'});
-  }});
-
-  // Section 4 — Venue cards
-  ScrollTrigger.create({trigger:'#secVen',start:'top 65%',once:true,onEnter:()=>{
-    const tl=gsap.timeline();
-    tl.fromTo('#venT',{opacity:0,y:20},{opacity:1,y:0,duration:.7})
-      .to('#cW',{opacity:1,y:0,duration:.8,ease:'power2.out'},'-=.2')
-      .to('#cR',{opacity:1,y:0,duration:.8,ease:'power2.out'},'-=.5');
-  }});
-
-  // Section 5 — Gallery
-  ScrollTrigger.create({trigger:'#secGal',start:'top 65%',once:true,onEnter:()=>{
-    gsap.fromTo('#galT',{opacity:0,y:20},{opacity:1,y:0,duration:.7});
-    gsap.fromTo('#galH',{opacity:0},{opacity:1,duration:.6,delay:.5});
-  }});
-
-  // Section 6 — Countdown
-  ScrollTrigger.create({trigger:'#secCd',start:'top 65%',once:true,onEnter:()=>{
-    const tl=gsap.timeline();
-    tl.fromTo('#cdL',{opacity:0,y:15},{opacity:1,y:0,duration:.6})
-      .fromTo('#cdT',{opacity:0,y:15},{opacity:1,y:0,duration:.6},'-=.3')
-      .to('.cd-box',{opacity:1,y:0,duration:.6,stagger:.12,ease:'power2.out'},'-=.2');
-  }});
-
-  // Section 7 — RSVP
-  ScrollTrigger.create({trigger:'#secRsvp',start:'top 65%',once:true,onEnter:()=>{
-    const tl=gsap.timeline();
-    tl.fromTo('#rT',{opacity:0,y:20},{opacity:1,y:0,duration:.6})
-      .fromTo('#rP',{opacity:0,y:15},{opacity:1,y:0,duration:.7},'-=.3')
-      .to('#rBtn',{opacity:1,y:0,duration:.6,ease:'back.out(1.7)'},'-=.2')
-      .fromTo('#rCt',{opacity:0},{opacity:1,duration:.5},'-=.1');
-  }});
-
-  // Letter glow hover
-  document.querySelectorAll('.letter').forEach(l=>{
-    l.addEventListener('mouseenter',()=>gsap.to(l,{textShadow:'0 0 35px rgba(200,164,92,.7),0 3px 25px rgba(0,0,0,.4)',scale:1.06,duration:.25}));
-    l.addEventListener('mouseleave',()=>gsap.to(l,{textShadow:'0 3px 25px rgba(0,0,0,.45),0 0 80px rgba(0,0,0,.2)',scale:1,duration:.35}));
-  });
+  ScrollTrigger.create({trigger:'#secFam',start:'top 65%',once:true,onEnter:()=>{gsap.fromTo('#famTx',{opacity:0,y:30},{opacity:1,y:0,duration:1.2,ease:'power2.out'})}});
+  ScrollTrigger.create({trigger:'#secVen',start:'top 65%',once:true,onEnter:()=>{const tl=gsap.timeline();tl.fromTo('#venT',{opacity:0,y:20},{opacity:1,y:0,duration:.7}).to('#cW',{opacity:1,y:0,duration:.8,ease:'power2.out'},'-=.2').to('#cR',{opacity:1,y:0,duration:.8,ease:'power2.out'},'-=.5')}});
+  ScrollTrigger.create({trigger:'#secGal',start:'top 65%',once:true,onEnter:()=>{gsap.fromTo('#galT',{opacity:0,y:20},{opacity:1,y:0,duration:.7});gsap.fromTo('#galH',{opacity:0},{opacity:1,duration:.6,delay:.5})}});
+  ScrollTrigger.create({trigger:'#secCd',start:'top 65%',once:true,onEnter:()=>{const tl=gsap.timeline();tl.fromTo('#cdL',{opacity:0,y:15},{opacity:1,y:0,duration:.6}).fromTo('#cdT',{opacity:0,y:15},{opacity:1,y:0,duration:.6},'-=.3').to('.cd-box',{opacity:1,y:0,duration:.6,stagger:.12,ease:'power2.out'},'-=.2')}});
+  ScrollTrigger.create({trigger:'#secRsvp',start:'top 65%',once:true,onEnter:()=>{const tl=gsap.timeline();tl.fromTo('#rT',{opacity:0,y:20},{opacity:1,y:0,duration:.6}).fromTo('#rP',{opacity:0,y:15},{opacity:1,y:0,duration:.7},'-=.3').to('#rBtn',{opacity:1,y:0,duration:.6,ease:'back.out(1.7)'},'-=.2').fromTo('#rCt',{opacity:0},{opacity:1,duration:.5},'-=.1')}});
+  document.querySelectorAll('.letter').forEach(l=>{l.addEventListener('mouseenter',()=>gsap.to(l,{textShadow:'0 0 35px rgba(200,164,92,.7),0 3px 25px rgba(0,0,0,.8)',scale:1.06,duration:.25}));l.addEventListener('mouseleave',()=>gsap.to(l,{scale:1,duration:.35}))});
 });
 </script>
 </body>
