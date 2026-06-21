@@ -45,6 +45,23 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 @keyframes b1{0%,100%{height:4px}50%{height:14px}}@keyframes b2{0%,100%{height:6px}50%{height:10px}}
 @keyframes b3{0%,100%{height:3px}50%{height:16px}}@keyframes b4{0%,100%{height:5px}50%{height:12px}}
 
+/*── MUSIC TOOLTIP ──*/
+.music-tip{
+  position:fixed;top:1.6rem;right:5rem;z-index:1000;
+  font-family:'Cormorant',serif;font-style:italic;font-size:.82rem;
+  color:var(--gold-l);
+  background:rgba(10,26,10,.80);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(200,164,92,.25);
+  padding:.35rem .85rem;
+  border-radius:20px;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+.music-tip.show{opacity:1}
+
 /*── FOG / SMOG ──*/
 .fog-wrap{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
 .fog{position:absolute;width:200%;height:100%;top:0;left:-50%;will-change:transform}
@@ -64,11 +81,8 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
   SECTION 1 — KATHAKALI HERO (full-fill)
 ═════════════════════════════════════════*/
 .sec-hero1{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#0d0a06}
-/* blurred backdrop fills any gap behind the cover image */
 .hero1-blur{position:absolute;inset:0;z-index:0;background:url('hero1.png') center center/cover no-repeat;filter:blur(30px) brightness(.5);transform:scale(1.2)}
-/* main image fully covers viewport */
 .hero1-img{position:absolute;inset:0;z-index:1;background:url('hero1.png') center center/cover no-repeat;opacity:0}
-/* gentle vignette + bottom fade that BLENDS into next section */
 .hero1-vig{position:absolute;inset:0;z-index:2;background:
   radial-gradient(ellipse at center,transparent 30%,rgba(13,10,6,.35) 100%),
   linear-gradient(180deg,rgba(13,10,6,.25) 0%,transparent 25%,transparent 70%,rgba(10,26,10,.85) 100%)}
@@ -80,7 +94,6 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 .names-bg{position:absolute;inset:0;z-index:0;background:url('bg.png') center center/cover no-repeat;transform:scale(1.05)}
 @keyframes kb{0%{transform:scale(1.05)}50%{transform:scale(1.12)}100%{transform:scale(1.05)}}
 .names-bg{animation:kb 32s ease-in-out infinite}
-/* darker overlay so WHITE letters dominate as foreground; top fades in from hero1 */
 .names-ov{position:absolute;inset:0;z-index:1;background:
   linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.45) 14%,rgba(10,26,10,.35) 45%,rgba(10,26,10,.45) 75%,rgba(10,26,10,.92) 100%)}
 .names-content{position:relative;z-index:10;text-align:center;padding:2rem 1rem;display:flex;flex-direction:column;align-items:center}
@@ -102,7 +115,6 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 ═════════════════════════════════════════*/
 .sec-family{position:relative;width:100%;padding:7rem 1.5rem;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:-1px}
 .sec-family .s-bg{position:absolute;inset:0;z-index:0;background:url('adobe-bg.jpg') center center/cover no-repeat fixed}
-/* blend top + bottom into neighbouring sections */
 .sec-family .s-ov{position:absolute;inset:0;z-index:1;background:
   linear-gradient(180deg,rgba(10,26,10,.92) 0%,rgba(10,26,10,.74) 18%,rgba(10,26,10,.70) 82%,rgba(10,26,10,.92) 100%)}
 .sec-family .fog-wrap{z-index:2}
@@ -205,7 +217,16 @@ body{font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--t
 
 <div class="loader" id="loader"><div class="loader-mono" id="lMono">A &amp; V</div><div class="loader-bar"></div></div>
 
-<button class="music-btn" id="mBtn" aria-label="Toggle music"><div class="m-bars" id="mBars"><span style="height:4px"></span><span style="height:6px"></span><span style="height:3px"></span><span style="height:5px"></span></div></button>
+<button class="music-btn" id="mBtn" aria-label="Toggle music">
+  <div class="m-bars" id="mBars">
+    <span style="height:4px"></span>
+    <span style="height:6px"></span>
+    <span style="height:3px"></span>
+    <span style="height:5px"></span>
+  </div>
+</button>
+<!-- Music tooltip — shows "click to stop" when audio starts -->
+<div class="music-tip" id="mTip">click to stop</div>
 
 <!-- ═══ SECTION 1 — KATHAKALI HERO (full image, text baked in) ═══ -->
 <section class="sec-hero1" id="secHero1">
@@ -341,20 +362,68 @@ const lA=sp('lnA','ARAVIND'),lW=sp('lnW','Weds'),lV=sp('lnV','VEENA');
 /* Countdown */
 (function(){const t=new Date('2026-09-12T11:50:00+05:30').getTime();function tk(){const d=t-Date.now();if(d<=0){['nD','nH','nM','nS'].forEach(i=>document.getElementById(i).textContent='0');return}document.getElementById('nD').textContent=Math.floor(d/864e5);document.getElementById('nH').textContent=Math.floor(d%864e5/36e5);document.getElementById('nM').textContent=Math.floor(d%36e5/6e4);document.getElementById('nS').textContent=String(Math.floor(d%6e4/1e3)).padStart(2,'0')}tk();setInterval(tk,1000)})();
 
-/* Music */
-(function(){const btn=document.getElementById('mBtn'),bars=document.getElementById('mBars'),au=document.getElementById('bgMusic');let on=false;btn.onclick=()=>{if(on){au.pause();bars.classList.remove('on')}else{au.play().catch(()=>{});bars.classList.add('on')}on=!on};function auto(){au.play().then(()=>{on=true;bars.classList.add('on')}).catch(()=>{});document.removeEventListener('click',auto);document.removeEventListener('touchstart',auto);document.removeEventListener('scroll',auto)}document.addEventListener('click',auto,{once:true});document.addEventListener('touchstart',auto,{once:true});document.addEventListener('scroll',auto,{once:true})})();
+/* ── MUSIC (auto-play + click-to-stop tooltip) ── */
+(function(){
+  const btn  = document.getElementById('mBtn'),
+        bars = document.getElementById('mBars'),
+        au   = document.getElementById('bgMusic'),
+        tip  = document.getElementById('mTip');
+  let on = false, tipTimer;
+
+  /* Show the tooltip for 3.5 s then fade it out */
+  function showTip(){
+    tip.classList.add('show');
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(()=> tip.classList.remove('show'), 3500);
+  }
+
+  /* Start audio and update UI */
+  function startAudio(){
+    au.play().then(()=>{
+      on = true;
+      bars.classList.add('on');
+      showTip();
+    }).catch(()=>{/* browser blocked — wait for interaction */});
+  }
+
+  /* Toggle on button click */
+  btn.onclick = ()=>{
+    if(on){
+      au.pause();
+      bars.classList.remove('on');
+      tip.classList.remove('show');
+    } else {
+      au.play().catch(()=>{});
+      bars.classList.add('on');
+      showTip();
+    }
+    on = !on;
+  };
+
+  /* Try autoplay immediately on page load */
+  startAudio();
+
+  /* Fallback: if browser blocked autoplay, start on first user interaction */
+  function autoFallback(){
+    if(!on) startAudio();
+    document.removeEventListener('click',   autoFallback);
+    document.removeEventListener('touchstart', autoFallback);
+    document.removeEventListener('scroll',  autoFallback);
+  }
+  document.addEventListener('click',      autoFallback, {once:true});
+  document.addEventListener('touchstart', autoFallback, {once:true});
+  document.addEventListener('scroll',     autoFallback, {once:true});
+})();
 
 /* ANIMATIONS */
 addEventListener('load',()=>{
   const intro=gsap.timeline();
   intro.to('#lMono',{opacity:1,duration:.8,ease:'power2.out'})
     .to('#loader',{opacity:0,duration:.6,delay:.4,ease:'power2.inOut',onComplete:()=>document.getElementById('loader').style.display='none'});
-  // Hero 1 — image fills + slow zoom
   intro.fromTo('#h1Img',{opacity:0,scale:1.08},{opacity:1,scale:1,duration:1.6,ease:'power2.out'},'-=.3')
     .to('#sc1',{opacity:1,duration:.6},'-=.4');
   gsap.to('#h1Img',{scale:1.06,duration:18,repeat:-1,yoyo:true,ease:'sine.inOut',delay:1.6});
 
-  // Names drop
   ScrollTrigger.create({trigger:'#secNames',start:'top 60%',once:true,onEnter:()=>{
     const tl=gsap.timeline();
     tl.to(lA,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'})
