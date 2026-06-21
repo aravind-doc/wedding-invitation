@@ -62,7 +62,10 @@ img{display:block;max-width:100%;height:auto}
    MUSIC BUTTON + TOOLTIP
 ══════════════════════════════════════ */
 .music-btn{
-  position:fixed;top:1rem;right:1rem;z-index:1000;
+  position:fixed;
+  top:max(1rem, env(safe-area-inset-top));
+  right:max(1rem, env(safe-area-inset-right));
+  z-index:1000;
   width:42px;height:42px;border-radius:50%;
   border:1px solid rgba(200,164,92,.35);
   background:rgba(10,26,10,.70);
@@ -84,7 +87,10 @@ img{display:block;max-width:100%;height:auto}
 @keyframes b4{0%,100%{height:5px}50%{height:12px}}
 
 .music-tip{
-  position:fixed;top:1.15rem;right:3.8rem;z-index:1000;
+  position:fixed;
+  top:max(1.15rem, calc(env(safe-area-inset-top) + .15rem));
+  right:max(3.8rem, calc(env(safe-area-inset-right) + 3.8rem));
+  z-index:1000;
   font-family:'Cormorant',serif;font-style:italic;font-size:.8rem;
   color:var(--gold-l);
   background:rgba(10,26,10,.82);
@@ -92,9 +98,14 @@ img{display:block;max-width:100%;height:auto}
   border:1px solid rgba(200,164,92,.22);
   padding:.3rem .75rem;border-radius:20px;
   white-space:nowrap;pointer-events:none;
-  opacity:0;transition:opacity .5s ease
+  opacity:0;transition:opacity .5s ease;
+  max-width:min(60vw, 220px);
+  text-align:right
 }
 .music-tip.show{opacity:1}
+@media(max-width:380px){
+  .music-tip{font-size:.72rem;right:max(3.4rem, calc(env(safe-area-inset-right) + 3.4rem));padding:.28rem .6rem}
+}
 
 /* ══════════════════════════════════════
    FOG
@@ -641,7 +652,7 @@ img{display:block;max-width:100%;height:auto}
 </head>
 <body>
 
-<audio id="bgMusic" loop preload="auto">
+<audio id="bgMusic" loop preload="auto" playsinline webkit-playsinline>
   <source src="wedding-song.mp3" type="audio/mpeg">
 </audio>
 
@@ -943,37 +954,92 @@ const lA = sp('lnA','ARAVIND'), lW = sp('lnW','Weds'), lV = sp('lnV','VEENA');
   tick(); setInterval(tick, 1000);
 })();
 
-/* ── Music (auto-play + tooltip) ── */
+/* ══════════════════════════════════════
+   MUSIC — auto-play on open, "click to stop" tooltip
+   Cross-browser/cross-device strategy:
+   1. Try to play immediately (works on many desktop browsers).
+   2. Mobile browsers (iOS Safari, Chrome Android) block audio
+      until the very first user gesture anywhere on the page —
+      so we also bind a one-time listener on pointerdown/touchstart/
+      keydown/scroll/click (capture phase, so it fires before any
+      other handler) to start playback the instant the user
+      interacts at all, even if that gesture isn't the music button.
+   3. Once playing, show the "click to stop" tooltip briefly.
+   4. Clicking the button toggles play/pause manually after that.
+══════════════════════════════════════ */
 (function(){
   const btn  = document.getElementById('mBtn'),
         bars = document.getElementById('mBars'),
         au   = document.getElementById('bgMusic'),
         tip  = document.getElementById('mTip');
-  let on = false, tipTimer;
 
-  function showTip(){
+  let playing = false, tipTimer = null, started = false;
+
+  au.muted = false;
+  au.volume = 1;
+
+  function showTip(text){
+    tip.textContent = text;
     tip.classList.add('show');
     clearTimeout(tipTimer);
     tipTimer = setTimeout(()=>tip.classList.remove('show'), 3500);
   }
-  function startAudio(){
-    au.play().then(()=>{ on=true; bars.classList.add('on'); showTip(); }).catch(()=>{});
+
+  function setPlayingUI(isPlaying){
+    playing = isPlaying;
+    bars.classList.toggle('on', isPlaying);
+    if(isPlaying) showTip('click to stop');
   }
-  btn.onclick = ()=>{
-    if(on){ au.pause(); bars.classList.remove('on'); tip.classList.remove('show'); }
-    else  { au.play().catch(()=>{}); bars.classList.add('on'); showTip(); }
-    on = !on;
-  };
-  startAudio();
-  function autoFallback(){
-    if(!on) startAudio();
-    document.removeEventListener('click',      autoFallback);
-    document.removeEventListener('touchstart', autoFallback);
-    document.removeEventListener('scroll',     autoFallback);
+
+  function tryAutoplay(){
+    if(started) return;
+    const p = au.play();
+    if(p !== undefined){
+      p.then(()=>{
+        started = true;
+        setPlayingUI(true);
+      }).catch(()=>{
+        /* Blocked by the browser — wait for the first user gesture. */
+      });
+    }
   }
-  document.addEventListener('click',      autoFallback, {once:true});
-  document.addEventListener('touchstart', autoFallback, {once:true});
-  document.addEventListener('scroll',     autoFallback, {once:true});
+
+  function firstGestureUnlock(){
+    if(started) return;
+    au.play().then(()=>{
+      started = true;
+      setPlayingUI(true);
+    }).catch(()=>{});
+  }
+
+  /* Attempt autoplay as soon as possible. */
+  tryAutoplay();
+  document.addEventListener('DOMContentLoaded', tryAutoplay);
+  window.addEventListener('load', tryAutoplay);
+
+  /* Fallback: unlock on the very first interaction anywhere on the
+     page (covers iOS Safari / Chrome Android autoplay restrictions). */
+  const gestures = ['pointerdown','touchstart','keydown','click','scroll','wheel'];
+  gestures.forEach(evt =>
+    document.addEventListener(evt, firstGestureUnlock, {capture:true, passive:true, once:true})
+  );
+
+  /* Manual toggle via the button — always available, overrides autoplay state. */
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    started = true;
+    if(playing){
+      au.pause();
+      setPlayingUI(false);
+      tip.classList.remove('show');
+    } else {
+      au.play().then(()=>setPlayingUI(true)).catch(()=>{});
+    }
+  });
+
+  /* Keep UI in sync if audio is paused/played by other means. */
+  au.addEventListener('play',  ()=>setPlayingUI(true));
+  au.addEventListener('pause', ()=>setPlayingUI(false));
 })();
 
 /* ── GSAP Animations ── */
