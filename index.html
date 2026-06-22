@@ -64,7 +64,6 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
 /* ═══ SCROLL WRAPPER — slides horizontally or vertically via JS transform ═══ */
 .sw{
   position:fixed;inset:0;z-index:1;
-  /* Pages stacked vertically; we translate Y to reveal each */
   will-change:transform;
 }
 
@@ -76,7 +75,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
   padding:clamp(4rem,9vh,6rem) var(--page-px);
   text-align:center;
   overflow:hidden;
-  pointer-events:none; /* disabled until active */
+  pointer-events:none;
 }
 .page.active{pointer-events:auto}
 
@@ -126,7 +125,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
 .letter{font-family:'Cinzel',serif;font-weight:700;color:#fff;display:inline-block;opacity:0;
   text-shadow:0 4px 30px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.9)}
 .p-invite .letter{font-size:clamp(2rem,9vw,5.5rem);letter-spacing:.02em}
-.p-invite .excl{color:var(--gold-l)}
+.p-invite .excl{color:#fff}
 .intro-orn{margin:clamp(1.2rem,3vh,2rem) auto 0;opacity:0}
 .intro-orn svg{width:clamp(90px,28vw,140px);height:auto}
 .intro-sub{font-family:'Cormorant',serif;font-style:italic;font-weight:300;font-size:clamp(.95rem,2.6vw,1.4rem);color:var(--gold-l);letter-spacing:.28em;opacity:0;margin-top:clamp(1rem,2.5vh,1.6rem);text-shadow:0 2px 12px rgba(0,0,0,.7)}
@@ -148,6 +147,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
 .fam-text .par{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(1rem,2.6vw,1.35rem);color:var(--gold-l);letter-spacing:.06em;display:block;margin:.35rem 0;font-style:normal}
 .fam-text .addr{font-size:.82em;color:rgba(255,255,255,.62);display:block;margin-bottom:.9rem;font-style:italic}
 .fam-text .hi{font-family:'Cinzel',serif;color:#fff;font-style:normal;font-size:clamp(1.25rem,3.6vw,1.7rem);font-weight:600}
+.fam-text .amp{display:block;font-family:'Cormorant',serif;font-style:italic;font-weight:400;color:var(--gold-l);font-size:clamp(1.1rem,2.8vw,1.4rem);margin:.15rem 0;line-height:1.3}
 
 /* ═══════════════ PAGE 4 — VENUE CARDS ═══════════════ */
 .ven-wrap{width:100%;max-width:980px;margin:0 auto}
@@ -168,12 +168,12 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
 .vc-map svg{width:14px;height:14px;fill:var(--gold)}
 
 /* ═══════════════ PAGE 5 — GALLERY ═══════════════ */
-.gal-wrap{width:100%;max-width:1200px;margin:0 auto}
+.gal-wrap{width:100%;max-width:1200px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
 .gal-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--gold);letter-spacing:.2em;margin-bottom:clamp(2rem,5vh,3.2rem);opacity:0;text-shadow:0 2px 14px rgba(0,0,0,.6)}
-.gal-vp{width:100%;height:clamp(260px,55vw,440px);perspective:1100px;display:flex;align-items:center;justify-content:center;cursor:grab;-webkit-user-select:none;user-select:none;overflow:visible}
+.gal-vp{width:100%;height:clamp(280px,62vw,440px);perspective:1100px;display:flex;align-items:center;justify-content:center;cursor:grab;-webkit-user-select:none;user-select:none;overflow:visible}
 .gal-vp:active{cursor:grabbing}
-.gal-cyl{position:relative;width:clamp(130px,30vw,230px);height:clamp(180px,42vw,310px);transform-style:preserve-3d;transition:transform .1s ease-out}
-.gal-item{position:absolute;width:clamp(120px,28vw,210px);height:clamp(168px,38vw,294px);left:50%;top:50%;border-radius:6px;overflow:hidden;box-shadow:0 12px 44px rgba(0,0,0,.55);border:2px solid rgba(200,164,92,.22);backface-visibility:hidden;transform-origin:center center}
+.gal-cyl{position:relative;width:clamp(140px,34vw,230px);height:clamp(196px,47vw,310px);transform-style:preserve-3d;transition:transform .1s ease-out}
+.gal-item{position:absolute;width:clamp(130px,32vw,210px);height:clamp(182px,44vw,294px);left:50%;top:50%;border-radius:6px;overflow:hidden;box-shadow:0 12px 44px rgba(0,0,0,.55);border:2px solid rgba(200,164,92,.22);backface-visibility:hidden;transform-origin:center center}
 .gal-item img{width:100%;height:100%;object-fit:cover}
 .gal-ph{width:100%;height:100%;background:linear-gradient(135deg,rgba(200,164,92,.14),rgba(10,26,10,.55));display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem}
 .gal-ph .pn{font-family:'Cinzel',serif;font-size:clamp(1.3rem,4vw,2rem);font-weight:300;color:rgba(200,164,92,.3)}
@@ -318,11 +318,11 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
         <span class="addr">Kuruvikattil House, Thodupuzha</span>
         Cordially invite your esteemed presence and blessings<br>
         with family on the occasion of the wedding ceremony of our son<br><br>
-        <span class="hi">Dr. Aravind K.V.</span><br><br>
-        with<br><br>
+        <span class="hi">Dr. Aravind K.V.</span>
+        <span class="amp">&amp;</span>
         <span class="hi">Dr. Veena S. Kumar</span><br>
         <span class="par" style="margin-top:.6rem">D/o Mr. Prasannakumar V. &amp; Mrs. Swarnalatha V.</span>
-        <span class="addr">Thekkepalavila, Ashtamudi, Kollam</span>
+        <span class="addr">Thekkepalavila, Ashtamudi P.O., Kollam</span>
       </div>
     </div>
   </section>
@@ -418,7 +418,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
       </div>
       <div class="footer">
         <div class="footer-m">A &amp; V</div>
-        <div class="footer-t">With love, the Aravind &amp; Veena families</div>
+        <div class="footer-t">With love Aravind &amp; Veena </div>
       </div>
     </div>
   </section>
@@ -436,7 +436,7 @@ const TOTAL = 7;
 let current = 0;
 let locked = true;    // starts locked; unlocked after loader
 let transitioning = false;
-let animDone = new Array(TOTAL).fill(false); // whether page anim has played
+let animDone = new Array(TOTAL).fill(false); // whether page anim has played at least once
 
 /* vh unit for cross-browser */
 function vh() {
@@ -485,8 +485,11 @@ function navigate(dir) {
   transitioning = true;
   goTo(target, true);
 
-  // Play target page animation if not yet played
-  if (!animDone[target]) {
+  // Replay the venue-card flip animation every time it is entered,
+  // whether moving forward OR backward through it.
+  if (target === 3) {
+    playAnim(3, true);
+  } else if (!animDone[target]) {
     playAnim(target);
   }
 }
@@ -518,8 +521,10 @@ const lA = sp('lnA', 'ARAVIND');
 const lW = sp('lnW', 'Weds');
 const lV = sp('lnV', 'VEENA');
 
-/* Returns a Promise that resolves when the animation ends */
-function playAnim(idx) {
+/* Returns a Promise that resolves when the animation ends.
+   `force` (used for the venue page) replays the animation even
+   if it has already played before — e.g. when navigating back to it. */
+function playAnim(idx, force) {
   return new Promise(resolve => {
     const done = () => { animDone[idx] = true; resolve(); };
 
@@ -564,9 +569,21 @@ function playAnim(idx) {
         { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', onComplete: done });
 
     } else if (idx === 3) {
-      // Page 4 — venue cards swing in
+      // Page 4 — venue cards swing in (replays every visit, forward or backward)
       const isTouch = window.matchMedia('(pointer:coarse)').matches;
       const tl = gsap.timeline({ onComplete: done });
+
+      // Reset state so the flip-in animation is visible again on re-entry
+      if (force) {
+        gsap.set('#venT', { opacity: 0, y: 20 });
+        if (isTouch) {
+          gsap.set('.ven-card', { opacity: 0, rotationY: -90, transformOrigin: 'left center' });
+        } else {
+          gsap.set('#cW', { opacity: 0, y: 50 });
+          gsap.set('#cR', { opacity: 0, y: 50 });
+        }
+      }
+
       tl.fromTo('#venT',
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.7 });
@@ -638,7 +655,11 @@ labels.forEach((lbl, i) => {
     if (i === current) return;
     transitioning = true;
     goTo(i, true);
-    if (!animDone[i]) playAnim(i);
+    if (i === 3) {
+      playAnim(3, true);
+    } else if (!animDone[i]) {
+      playAnim(i);
+    }
   });
   dotNav.appendChild(d);
 });
@@ -737,22 +758,21 @@ document.getElementById('mapBtn').addEventListener('click', e => {
   if (!animDone[current]) return;
   transitioning = true;
   goTo(3, true);
-  if (!animDone[3]) playAnim(3);
+  playAnim(3, true);
 });
 
 /* ════════════════════════════════════════════
-   GALLERY — 3D cylinder
+   GALLERY — 3D cylinder (centered, scales to viewport on mobile too)
 ════════════════════════════════════════════ */
 (function () {
   const cyl = document.getElementById('galCyl');
+  const vp  = document.getElementById('galVP');
   const n = 7;
-  const cylW = 180;
-  const r = Math.round(cylW * 1.55);
-  const a = 360 / n;
+
+  // Build items once
   for (let i = 0; i < n; i++) {
     const d = document.createElement('div');
     d.className = 'gal-item';
-    d.style.transform = `rotateY(${i * a}deg) translateZ(${r}px) translateX(-50%) translateY(-50%)`;
     const img = document.createElement('img');
     img.src = `photos/photo${i + 1}.jpg`;
     img.alt = `Photo ${i + 1}`;
@@ -764,7 +784,24 @@ document.getElementById('mapBtn').addEventListener('click', e => {
     cyl.appendChild(d);
   }
 
-  const vp = document.getElementById('galVP');
+  /* Recompute item radius/positions from the *actual rendered* item width
+     so the cylinder is always sized correctly and centered — on phones too. */
+  function layoutCylinder() {
+    const items = cyl.querySelectorAll('.gal-item');
+    if (!items.length) return;
+    const itemW = items[0].getBoundingClientRect().width;
+    const r = Math.round(itemW * 1.55);
+    const a = 360 / n;
+    items.forEach((d, i) => {
+      d.style.transform = `rotateY(${i * a}deg) translateZ(${r}px) translateX(-50%) translateY(-50%)`;
+    });
+  }
+  layoutCylinder();
+  window.addEventListener('resize', layoutCylinder);
+  // Re-check after fonts/layout settle (helps first-paint on mobile)
+  window.addEventListener('load', layoutCylinder);
+  setTimeout(layoutCylinder, 300);
+
   let ang = 0, drag = false, sx = 0, sa = 0, vel = 0, lx = 0, lt = 0;
 
   function start(x) { drag = true; sx = x; sa = ang; vel = 0; lx = x; lt = Date.now(); cyl.style.transition = 'none'; }
@@ -790,14 +827,13 @@ document.getElementById('mapBtn').addEventListener('click', e => {
   vp.addEventListener('touchend',   end);
 
   // Idle rotation (only runs when not dragging)
-  let rafId;
   function spin() {
     if (!drag) {
       ang += 0.12;
       cyl.style.transition = 'none';
       cyl.style.transform = `rotateY(${ang}deg)`;
     }
-    rafId = requestAnimationFrame(spin);
+    requestAnimationFrame(spin);
   }
   spin();
 })();
