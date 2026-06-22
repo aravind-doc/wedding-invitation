@@ -23,31 +23,31 @@
   --txt:rgba(255,255,255,0.94);--dim:rgba(255,255,255,0.55);
   --page-px: clamp(1.1rem, 5vw, 3rem);
 }
-html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
+html{
+  scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%;
+  /* PAGE-SNAP: each section snaps softly into place, one at a time */
+  scroll-snap-type:y mandatory;
+}
 body{
   font-family:'Cormorant Garamond',serif;background:var(--deep);color:var(--txt);
   overflow-x:hidden;-webkit-font-smoothing:antialiased;width:100%;max-width:100vw;
 }
 img{display:block;max-width:100%;height:auto}
 
-/* ═══════════════════ FIXED BACKGROUND (one image, all pages) ═══════════════════ */
+/* ═══════════════════ FIXED SINGLE BACKGROUND + DRONE PUSH ═══════════════════ */
 .bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden}
+/* .bg-move is pushed by scroll (drone descending toward the plantation) */
+.bg-move{position:absolute;inset:-12%;will-change:transform}
+/* .bg-img breathes slowly on its own (ambient drone hover) */
 .bg-img{
-  position:absolute;inset:-2%;
-  background:url('bg.jpg') center center/cover no-repeat;
-  transform:scale(1.04);
-  animation:bgPulse 40s ease-in-out infinite;
-  will-change:transform;
-}
-@keyframes bgPulse{0%{transform:scale(1.04)}50%{transform:scale(1.12)}100%{transform:scale(1.04)}}
-/* readability scrim — keeps the scene visible but text legible everywhere */
-.bg-scrim{
   position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse at center,transparent 0%,rgba(8,20,12,.30) 100%),
-    linear-gradient(180deg,rgba(8,20,12,.62) 0%,rgba(8,20,12,.42) 28%,rgba(8,20,12,.42) 72%,rgba(8,20,12,.66) 100%);
+  background:url('bg.jpg') center center/cover no-repeat;
+  animation:amb 64s ease-in-out infinite;will-change:transform;
 }
-/* drifting smog over the fixed bg */
+@keyframes amb{0%{transform:scale(1.0)}50%{transform:scale(1.07)}100%{transform:scale(1.0)}}
+.bg-scrim{position:absolute;inset:0;background:
+  radial-gradient(ellipse at center,transparent 0%,rgba(8,20,12,.30) 100%),
+  linear-gradient(180deg,rgba(8,20,12,.62) 0%,rgba(8,20,12,.42) 28%,rgba(8,20,12,.42) 72%,rgba(8,20,12,.66) 100%)}
 .bg-fog{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .fog{position:absolute;width:200%;height:100%;top:0;left:-50%;will-change:transform}
 .fog-a{background:radial-gradient(ellipse 60vw 130px at 15% 28%,rgba(255,255,255,.18) 0%,transparent 70%),radial-gradient(ellipse 80vw 110px at 55% 42%,rgba(255,255,255,.13) 0%,transparent 70%);animation:fR 30s linear infinite;opacity:.6}
@@ -56,7 +56,6 @@ img{display:block;max-width:100%;height:auto}
 @keyframes fR{0%{transform:translateX(0)}100%{transform:translateX(50%)}}
 @keyframes fL{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* all content sits above the fixed background */
 .content{position:relative;z-index:1}
 
 /* ═══════════════════ LOADER ═══════════════════ */
@@ -87,13 +86,15 @@ img{display:block;max-width:100%;height:auto}
 .scroll-chev{width:14px;height:14px;border-right:1.5px solid rgba(255,255,255,.6);border-bottom:1.5px solid rgba(255,255,255,.6);transform:rotate(45deg);animation:chev 2s ease-in-out infinite}
 @keyframes chev{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(5px)}}
 
-/* ═══════════════════ GENERIC PAGE (each section = one floating page) ═══════════════════ */
+/* ═══════════════════ PAGE (each section snaps) ═══════════════════ */
 .page{
   position:relative;width:100%;
   min-height:100vh;min-height:100dvh;
   display:flex;align-items:center;justify-content:center;
   padding:clamp(4rem,9vh,6rem) var(--page-px);
   text-align:center;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
 }
 
 /* ═══════════════════ PAGE 1 — YOU ARE INVITED ═══════════════════ */
@@ -118,14 +119,14 @@ img{display:block;max-width:100%;height:auto}
 .date-tx{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.2rem,4.2vw,2.6rem);color:#fff;letter-spacing:.08em;opacity:0;margin-top:.3rem;text-shadow:0 2px 16px rgba(0,0,0,.85)}
 .mal-dt{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(.82rem,2vw,1.15rem);color:rgba(255,255,255,.7);letter-spacing:.13em;margin-top:.4rem;opacity:0;text-shadow:0 1px 10px rgba(0,0,0,.7)}
 
-/* ═══════════════════ PAGE 3 — FAMILY (larger fonts) ═══════════════════ */
+/* ═══════════════════ PAGE 3 — FAMILY ═══════════════════ */
 .fam-content{width:100%;max-width:760px;margin:0 auto}
 .fam-text{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(1.15rem,3.2vw,1.7rem);color:var(--txt);line-height:1.95;letter-spacing:.015em;opacity:0;text-shadow:0 2px 14px rgba(0,0,0,.7)}
 .fam-text .par{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(1rem,2.6vw,1.35rem);color:var(--gold-l);letter-spacing:.06em;display:block;margin:.35rem 0;font-style:normal}
 .fam-text .addr{font-size:.82em;color:rgba(255,255,255,.62);display:block;margin-bottom:.9rem;font-style:italic}
 .fam-text .hi{font-family:'Cinzel',serif;color:#fff;font-style:normal;font-size:clamp(1.25rem,3.6vw,1.7rem);font-weight:600}
 
-/* ═══════════════════ PAGE 4 — VENUE CARDS (larger) ═══════════════════ */
+/* ═══════════════════ PAGE 4 — VENUE CARDS ═══════════════════ */
 .ven-wrap{width:100%;max-width:980px;margin:0 auto}
 .ven-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--gold);letter-spacing:.2em;margin-bottom:clamp(2rem,5vh,3.2rem);opacity:0;text-shadow:0 2px 14px rgba(0,0,0,.6)}
 .ven-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(1.2rem,3vw,2.2rem)}
@@ -194,6 +195,7 @@ img{display:block;max-width:100%;height:auto}
 @media(prefers-reduced-motion:reduce){
   .fog,.bg-img{animation:none!important}
   .scroll-chev,.m-bars span{animation:none!important}
+  html{scroll-snap-type:none}
   *{transition-duration:.01s!important}
 }
 </style>
@@ -202,7 +204,7 @@ img{display:block;max-width:100%;height:auto}
 
 <!-- ═══ FIXED SINGLE BACKGROUND ═══ -->
 <div class="bg-layer">
-  <div class="bg-img"></div>
+  <div class="bg-move" id="bgMove"><div class="bg-img"></div></div>
   <div class="bg-scrim"></div>
   <div class="bg-fog"><div class="fog fog-a"></div><div class="fog fog-b"></div><div class="fog fog-c"></div></div>
 </div>
@@ -266,7 +268,8 @@ img{display:block;max-width:100%;height:auto}
       <span class="hi">Dr. Aravind K.V.</span><br><br>
       with<br><br>
       <span class="hi">Dr. Veena S. Kumar</span><br>
-      <span class="addr" style="margin-top:.6rem">D/o Mr. Prasannakumar V. &amp; Mrs. Swarnalatha V.<br>Thekkepalavila, Ashtamudi, Kollam</span>
+      <span class="par" style="margin-top:.6rem">D/o Mr. Prasannakumar V. &amp; Mrs. Swarnalatha V.</span>
+      <span class="addr">Thekkepalavila, Ashtamudi, Kollam</span>
     </div>
   </div>
 </section>
@@ -349,30 +352,30 @@ function sp(id,t){const e=document.getElementById(id);t.split('').forEach(c=>{co
 const i1=sp('il1','YOU ARE'), i2=sp('il2','INVITED TO'), i3=sp('il3','CELEBRATE!');
 const lA=sp('lnA','ARAVIND'), lW=sp('lnW','Weds'), lV=sp('lnV','VEENA');
 
+/* ── DRONE BACKGROUND PUSH: slow descent toward the plantation as you scroll ── */
+gsap.to('#bgMove',{
+  yPercent:-6, scale:1.16, ease:'none',
+  scrollTrigger:{trigger:'.content',start:'top top',end:'bottom bottom',scrub:1.4}
+});
+
 /* ── 3D gallery build ── */
 (function(){const cyl=document.getElementById('galCyl'),n=7;const cylW=cyl.offsetWidth||180;const r=Math.round(cylW*1.55);const a=360/n;for(let i=0;i<n;i++){const d=document.createElement('div');d.className='gal-item';d.style.transform=`rotateY(${i*a}deg) translateZ(${r}px)`;const img=document.createElement('img');img.src=`photos/photo${i+1}.jpg`;img.alt=`Photo ${i+1}`;img.loading='lazy';img.onerror=function(){this.parentElement.innerHTML=`<div class="gal-ph"><div class="pn">${i+1}</div><span>photo${i+1}.jpg</span></div>`};d.appendChild(img);cyl.appendChild(d)}})();
 (function(){const vp=document.getElementById('galVP'),cyl=document.getElementById('galCyl');let ang=0,drag=false,sx=0,sa=0,vel=0,lx=0,lt=0;function s(x){drag=true;sx=x;sa=ang;vel=0;lx=x;lt=Date.now();cyl.style.transition='none'}function m(x){if(!drag)return;ang=sa+(x-sx)*.35;cyl.style.transform=`rotateY(${ang}deg)`;const now=Date.now(),dt=now-lt;if(dt>0){vel=(x-lx)/dt;lx=x;lt=now}}function e(){drag=false;ang+=vel*150;cyl.style.transition='transform 1s cubic-bezier(.23,1,.32,1)';cyl.style.transform=`rotateY(${ang}deg)`}vp.addEventListener('mousedown',ev=>{ev.preventDefault();s(ev.clientX)});addEventListener('mousemove',ev=>m(ev.clientX));addEventListener('mouseup',e);vp.addEventListener('touchstart',ev=>s(ev.touches[0].clientX),{passive:true});vp.addEventListener('touchmove',ev=>m(ev.touches[0].clientX),{passive:true});vp.addEventListener('touchend',e);gsap.to({},{duration:20,repeat:-1,onUpdate(){if(!drag){ang+=.15;cyl.style.transition='none';cyl.style.transform=`rotateY(${ang}deg)`}}})})();
 
-/* ── VENUE CARDS — desktop mouse-tilt + mobile flip/float/gyro ── */
+/* ── VENUE CARDS — desktop mouse-tilt + mobile float/gyro ── */
 const isTouch = window.matchMedia('(pointer:coarse)').matches;
 (function(){
   if(!isTouch){
-    /* DESKTOP: mouse-follow 3D tilt + light shine */
     document.querySelectorAll('.ven-card').forEach(card=>{
       card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`rotateY(${x*16}deg) rotateX(${-y*16}deg)`;card.style.setProperty('--mx',(x+.5)*100+'%');card.style.setProperty('--my',(y+.5)*100+'%')});
       card.addEventListener('mouseleave',()=>{card.style.transform='rotateY(0) rotateX(0)';card.style.transition='transform .5s ease-out';setTimeout(()=>card.style.transition='',500)});
       card.addEventListener('mouseenter',()=>{card.style.transition=''});
     });
   } else {
-    /* MOBILE: gentle continuous float + gyroscope parallax tilt */
-    document.querySelectorAll('.ven-card').forEach((card,i)=>{
-      gsap.to(card,{y:'+=10',duration:3+i*.4,repeat:-1,yoyo:true,ease:'sine.inOut',delay:i*.3});
-    });
+    document.querySelectorAll('.ven-card').forEach((card,i)=>{gsap.to(card,{y:'+=10',duration:3+i*.4,repeat:-1,yoyo:true,ease:'sine.inOut',delay:i*.3})});
     if('DeviceOrientationEvent' in window){
       function gyro(e){const g=Math.max(-14,Math.min(14,(e.gamma||0)*.35));const b=Math.max(-14,Math.min(14,((e.beta||0)-45)*.35));document.querySelectorAll('.ven-card').forEach(card=>{const r=card.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0){card.style.transition='transform .15s ease-out';card.style.transform=`rotateY(${g}deg) rotateX(${-b}deg)`}})}
-      if(typeof DeviceOrientationEvent.requestPermission==='function'){
-        document.addEventListener('click',function o(){DeviceOrientationEvent.requestPermission().then(st=>{if(st==='granted')addEventListener('deviceorientation',gyro)}).catch(()=>{});document.removeEventListener('click',o)},{once:true});
-      } else { addEventListener('deviceorientation',gyro) }
+      if(typeof DeviceOrientationEvent.requestPermission==='function'){document.addEventListener('click',function o(){DeviceOrientationEvent.requestPermission().then(st=>{if(st==='granted')addEventListener('deviceorientation',gyro)}).catch(()=>{});document.removeEventListener('click',o)},{once:true})}else{addEventListener('deviceorientation',gyro)}
     }
   }
 })();
@@ -396,23 +399,23 @@ const isTouch = window.matchMedia('(pointer:coarse)').matches;
 
 /* ── ANIMATIONS ── */
 addEventListener('load',()=>{
-  /* Loader → Page 1 letter drop */
+  /* Loader → Page 1 letter drop (clean fromTo — every letter drops) */
   const intro=gsap.timeline();
   intro.to('#lMono',{opacity:1,duration:.8,ease:'power2.out'})
     .to('#loader',{opacity:0,duration:.6,delay:.4,ease:'power2.inOut',onComplete:()=>document.getElementById('loader').style.display='none'})
-    .to(i1,{opacity:1,y:0,duration:.6,stagger:.05,ease:'bounce.out'},'-=.2').from(i1,{y:-120,duration:.6,stagger:.05,ease:'bounce.out'},'<')
-    .to(i2,{opacity:1,y:0,duration:.6,stagger:.05,ease:'bounce.out'},'-=.15').from(i2,{y:-110,duration:.6,stagger:.05,ease:'bounce.out'},'<')
-    .to(i3,{opacity:1,y:0,duration:.6,stagger:.05,ease:'bounce.out'},'-=.1').from(i3,{y:-120,duration:.6,stagger:.05,ease:'bounce.out'},'<')
+    .fromTo(i1,{opacity:0,y:-130},{opacity:1,y:0,duration:.65,stagger:.05,ease:'bounce.out'},'-=.2')
+    .fromTo(i2,{opacity:0,y:-120},{opacity:1,y:0,duration:.65,stagger:.05,ease:'bounce.out'},'-=.4')
+    .fromTo(i3,{opacity:0,y:-130},{opacity:1,y:0,duration:.65,stagger:.05,ease:'bounce.out'},'-=.4')
     .to('#iOrn',{opacity:1,duration:.6},'-=.1')
     .to('#iSub',{opacity:1,duration:.7},'-=.3')
     .to('#sc1',{opacity:1,duration:.5},'-=.2');
 
-  /* Page 2 — ARAVIND WEDS VEENA drop on scroll */
+  /* Page 2 — ARAVIND WEDS VEENA drop on scroll (clean fromTo) */
   ScrollTrigger.create({trigger:'#pNames',start:'top 58%',once:true,onEnter:()=>{
     const tl=gsap.timeline();
-    tl.to(lA,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'}).from(lA,{y:-150,duration:.65,stagger:.07,ease:'bounce.out'},'<')
-      .to(lW,{opacity:1,y:0,duration:.6,stagger:.09,ease:'bounce.out'},'-=.1').from(lW,{y:-110,duration:.6,stagger:.09,ease:'bounce.out'},'<')
-      .to(lV,{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'},'-=.05').from(lV,{y:-140,duration:.65,stagger:.07,ease:'bounce.out'},'<')
+    tl.fromTo(lA,{opacity:0,y:-150},{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'})
+      .fromTo(lW,{opacity:0,y:-110},{opacity:1,y:0,duration:.6,stagger:.09,ease:'bounce.out'},'-=.15')
+      .fromTo(lV,{opacity:0,y:-140},{opacity:1,y:0,duration:.65,stagger:.07,ease:'bounce.out'},'-=.1')
       .to('#gDiv',{width:200,duration:.7,ease:'power2.out'},'+=.2')
       .fromTo('#sDt',{opacity:0,y:15},{opacity:1,y:0,duration:.7},'-=.3')
       .fromTo('#dTx',{opacity:0,y:15},{opacity:1,y:0,duration:.7},'-=.3')
@@ -422,7 +425,6 @@ addEventListener('load',()=>{
 
   ScrollTrigger.create({trigger:'#pFam',start:'top 65%',once:true,onEnter:()=>gsap.fromTo('#famTx',{opacity:0,y:30},{opacity:1,y:0,duration:1.1,ease:'power2.out'})});
 
-  /* Page 4 — cards: desktop slide-up / mobile 3D flip-in */
   ScrollTrigger.create({trigger:'#pVen',start:'top 65%',once:true,onEnter:()=>{
     gsap.fromTo('#venT',{opacity:0,y:18},{opacity:1,y:0,duration:.65});
     if(isTouch){
@@ -440,8 +442,9 @@ addEventListener('load',()=>{
 
   ScrollTrigger.create({trigger:'#pRsvp',start:'top 65%',once:true,onEnter:()=>{const tl=gsap.timeline();tl.fromTo('#rT',{opacity:0,y:18},{opacity:1,y:0,duration:.6}).fromTo('#rP',{opacity:0,y:14},{opacity:1,y:0,duration:.65},'-=.3').to('#rBtn',{opacity:1,y:0,duration:.6,ease:'back.out(1.7)'},'-=.2').fromTo('#rCt',{opacity:0},{opacity:1,duration:.5},'-=.1')}});
 
-  /* letter hover glow */
   document.querySelectorAll('.letter').forEach(l=>{l.addEventListener('mouseenter',()=>gsap.to(l,{textShadow:'0 0 35px rgba(200,164,92,.7),0 3px 25px rgba(0,0,0,.85)',scale:1.06,duration:.25}));l.addEventListener('mouseleave',()=>gsap.to(l,{scale:1,duration:.35}))});
+
+  ScrollTrigger.refresh();
 });
 </script>
 </body>
