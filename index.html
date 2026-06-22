@@ -78,6 +78,9 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
   pointer-events:none;
 }
 .page.active{pointer-events:auto}
+/* Pages whose content can exceed viewport height (e.g. two venue cards
+   stacked on a narrow phone) scroll internally instead of clipping. */
+.page.scrollable{align-items:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch}
 
 /* ═══ LOADER ═══ */
 .loader{position:fixed;inset:0;z-index:9999;background:var(--deep);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem}
@@ -151,18 +154,18 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
 
 /* ═══════════════ PAGE 4 — VENUE CARDS ═══════════════ */
 .ven-wrap{width:100%;max-width:980px;margin:0 auto}
-.ven-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--gold);letter-spacing:.2em;margin-bottom:clamp(2rem,5vh,3.2rem);opacity:0;text-shadow:0 2px 14px rgba(0,0,0,.6)}
-.ven-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(1.2rem,3vw,2.2rem)}
+.ven-title{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--gold);letter-spacing:.2em;margin-bottom:clamp(1.4rem,4vh,3.2rem);opacity:0;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.ven-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(1rem,3vw,2.2rem)}
 .tilt-wrap{perspective:1000px}
-.ven-card{position:relative;padding:clamp(2rem,4.5vw,3rem) clamp(1.2rem,3.5vw,2.2rem);border:1px solid rgba(200,164,92,.25);border-radius:8px;background:linear-gradient(160deg,rgba(18,38,24,.78) 0%,rgba(10,24,15,.86) 100%);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;opacity:0;transform-style:preserve-3d;will-change:transform;box-shadow:0 10px 38px rgba(0,0,0,.42)}
+.ven-card{position:relative;padding:clamp(1.5rem,4.5vw,3rem) clamp(1.2rem,3.5vw,2.2rem);border:1px solid rgba(200,164,92,.25);border-radius:8px;background:linear-gradient(160deg,rgba(18,38,24,.78) 0%,rgba(10,24,15,.86) 100%);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;opacity:0;transform-style:preserve-3d;will-change:transform;box-shadow:0 10px 38px rgba(0,0,0,.42)}
 .ven-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.vc-icon{width:54px;height:54px;margin:0 auto clamp(.9rem,2vh,1.3rem);border:1px solid rgba(200,164,92,.3);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.vc-icon{width:54px;height:54px;margin:0 auto clamp(.6rem,2vh,1.3rem);border:1px solid rgba(200,164,92,.3);border-radius:50%;display:flex;align-items:center;justify-content:center}
 .vc-icon svg{width:22px;height:22px}
-.vc-label{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(.74rem,1.8vw,.95rem);color:var(--gold);letter-spacing:.26em;text-transform:uppercase;margin-bottom:clamp(.7rem,2vh,1.1rem)}
+.vc-label{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(.74rem,1.8vw,.95rem);color:var(--gold);letter-spacing:.26em;text-transform:uppercase;margin-bottom:clamp(.5rem,2vh,1.1rem)}
 .vc-date{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(1.15rem,3.2vw,1.7rem);color:#fff;margin-bottom:.15rem}
-.vc-day{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(.95rem,2.2vw,1.15rem);color:var(--gold-l);margin-bottom:clamp(.7rem,2vh,1.1rem)}
+.vc-day{font-family:'Cormorant',serif;font-style:italic;font-weight:400;font-size:clamp(.95rem,2.2vw,1.15rem);color:var(--gold-l);margin-bottom:clamp(.5rem,2vh,1.1rem)}
 .vc-time{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1rem,2.4vw,1.25rem);color:var(--txt);margin-bottom:.4rem}
-.vc-name{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.3rem);color:var(--txt);margin-bottom:clamp(1.1rem,3vh,1.7rem);line-height:1.5}
+.vc-name{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.3rem);color:var(--txt);margin-bottom:clamp(.8rem,3vh,1.7rem);line-height:1.5}
 .vc-map{display:inline-flex;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:clamp(.68rem,1.5vw,.78rem);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(200,164,92,.3);padding:.65rem 1.4rem;border-radius:3px;transition:all .3s}
 .vc-map:hover{background:rgba(200,164,92,.14);border-color:var(--gold)}
 .vc-map svg{width:14px;height:14px;fill:var(--gold)}
@@ -213,6 +216,8 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
   .cd-box{padding:.85rem .4rem}
   .rsvp-btn{white-space:normal;text-align:center;justify-content:center}
   .dot-nav{display:none}
+  .p-venues{padding-top:clamp(3.2rem,7vh,4.5rem);padding-bottom:clamp(1.5rem,4vh,2.5rem)}
+  .ven-grid{gap:1rem}
 }
 @media(prefers-reduced-motion:reduce){
   .fog,.bg-img,.bg-move{animation:none!important}
@@ -316,8 +321,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
         We,<br>
         <span class="par">Mr. K.R. Venugopalan &amp; Mrs. Geethammal K.T.</span>
         <span class="addr">Kuruvikattil House, Thodupuzha</span>
-        Cordially invite your esteemed presence and blessings<br>
-        with family on the occasion of the wedding ceremony of our son<br><br>
+        Cordially invite you and your family to celebrate the wedding ceremony of our son<br><br>
         <span class="hi">Dr. Aravind K.V.</span>
         <span class="amp">&amp;</span>
         <span class="hi">Dr. Veena S. Kumar</span><br>
@@ -328,7 +332,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
   </section>
 
   <!-- PAGE 4 — VENUE CARDS -->
-  <section class="page p-venues" id="p3" style="top:300vh;top:calc(300dvh)">
+  <section class="page p-venues scrollable" id="p3" style="top:300vh;top:calc(300dvh)">
     <div class="ven-wrap">
       <div class="ven-title" id="venT">Celebrations</div>
       <div class="ven-grid">
@@ -418,7 +422,7 @@ body{overflow:hidden;position:fixed;width:100%;height:100%}
       </div>
       <div class="footer">
         <div class="footer-m">A &amp; V</div>
-        <div class="footer-t">With love Aravind &amp; Veena </div>
+        <div class="footer-t">With love, the Aravind &amp; Veena families</div>
       </div>
     </div>
   </section>
@@ -468,6 +472,12 @@ function goTo(idx, animate) {
   document.querySelectorAll('.page').forEach((p, i) => {
     p.classList.toggle('active', i === idx);
   });
+  // Reset internal scroll on the page we're entering so its content
+  // always starts visible from the top.
+  const target = document.querySelectorAll('.page')[idx];
+  if (target && target.classList.contains('scrollable')) {
+    target.scrollTop = 0;
+  }
   // update dots
   document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
 }
@@ -670,10 +680,32 @@ labels.forEach((lbl, i) => {
 let wheelAcc = 0;
 let wheelTimer = null;
 const WHEEL_THRESH = 60; // pixels accumulated before triggering
+const EDGE_SLOP = 2; // px tolerance for "at scroll edge"
+
+/* For pages that scroll internally (e.g. two stacked venue cards taller
+   than the viewport), only change page once the user has scrolled that
+   page's content to the matching edge — otherwise let it scroll normally. */
+function activeScrollEl() {
+  const p = document.querySelectorAll('.page')[current];
+  return p && p.classList.contains('scrollable') ? p : null;
+}
+function atTopEdge(el)    { return el.scrollTop <= EDGE_SLOP; }
+function atBottomEdge(el) { return el.scrollTop + el.clientHeight >= el.scrollHeight - EDGE_SLOP; }
 
 window.addEventListener('wheel', e => {
+  if (locked || transitioning || !animDone[current]) { e.preventDefault(); return; }
+
+  const sEl = activeScrollEl();
+  if (sEl && sEl.scrollHeight > sEl.clientHeight + 1) {
+    const goingDown = e.deltaY > 0;
+    const goingUp   = e.deltaY < 0;
+    if ((goingDown && !atBottomEdge(sEl)) || (goingUp && !atTopEdge(sEl))) {
+      // Let the page scroll its own content; don't hijack for page-nav.
+      return;
+    }
+  }
+
   e.preventDefault();
-  if (locked || transitioning || !animDone[current]) return;
   wheelAcc += e.deltaY;
   clearTimeout(wheelTimer);
   wheelTimer = setTimeout(() => { wheelAcc = 0; }, 200);
@@ -696,6 +728,14 @@ window.addEventListener('touchend', e => {
   const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
   // Only act on vertical swipes
   if (Math.abs(dy) > 40 && Math.abs(dy) > dx * 1.5) {
+    const sEl = activeScrollEl();
+    if (sEl && sEl.scrollHeight > sEl.clientHeight + 1) {
+      const swipingUp   = dy > 0; // content moves up → reveal lower content / next page
+      const swipingDown = dy < 0;
+      if ((swipingUp && !atBottomEdge(sEl)) || (swipingDown && !atTopEdge(sEl))) {
+        return; // still room to scroll within the page itself
+      }
+    }
     navigate(dy > 0 ? 1 : -1);
   }
 }, { passive: true });
